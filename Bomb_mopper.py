@@ -16,9 +16,6 @@ class game_object:
         
 class button:
     def __init__(self):
-        self.x = x
-        self.y = y
-        self.screen = screen
         self.pressed = False
         self.active = False
         self.clicked = False
@@ -54,11 +51,14 @@ class screen:
         self.name = name
         self.surf = pygame.Surface((wid,hei))
 
+    def set_BG(self,color):
+        self.BG = color
+
     def update(self):
         pass
 
     def draw(self):
-        pass
+        GO.SURFACE_MAIN.fill(self.BG)
 
     def add_button(self,new_button):
         self.buttons.append(new_button)
@@ -68,7 +68,6 @@ def quit_nicely():
     pygame.quit()
 
 def draw_game():
-    GO.SURFACE_MAIN.fill(constants.DEFAULT_BG)
     GO.screens[GO.active_screen].draw()
     pygame.display.flip()
 
@@ -86,6 +85,17 @@ def game_main_loop():
         for event in event_list:
             if event.type == pygame.QUIT:
                 game_quit = True
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    if GO.active_screen == "intro":
+                        GO.active_screen = "main"
+                    elif GO.active_screen == "main":
+                        GO.active_screen = "high"
+                    elif GO.active_screen == "high":
+                        GO.active_screen = "options"
+                    elif GO.active_screen == "options":
+                        GO.active_screen = "intro"
                 
         if GO.active_screen == "intro":
             pass
@@ -102,7 +112,7 @@ def game_main_loop():
     quit_nicely()
 
 def initialize_game():
-    os.environ['SDL_VIDEO_WINDOW_POS'] = "5,25"
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "5,35"
     pygame.init()
     pygame.display.set_icon(constants.S_BOMB)
     pygame.display.set_caption("Bomb Mopper")
@@ -117,12 +127,26 @@ def initialize_game():
     options_screen = screen("options",constants.GAME_WIDTH,constants.GAME_HEIGHT)
     main_screen = screen("main",constants.GAME_WIDTH,constants.GAME_HEIGHT)
 
+    intro_screen.set_BG((0,200,0))
+    high_score_screen.set_BG((0,0,200))
+    options_screen.set_BG((200,0,0))
+    main_screen.set_BG((100,100,0))
+
     GO.add_screen(intro_screen)
     GO.add_screen(high_score_screen)
     GO.add_screen(options_screen)
     GO.add_screen(main_screen)
 
-    back_button = button(0,0,main_screen)
+    new_button = button()
+    options_button = button()
+    high_score_button = button()
+
+    new_button.place(0,50,intro_screen)
+    options_button.place(300,50,intro_screen)
+    high_score_button.place(600,50,intro_screen)
+    
+    back_button = button()
+    back_button.place(0,0,main_screen)
     
     
     return(GO)
