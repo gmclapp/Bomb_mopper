@@ -13,6 +13,23 @@ class game_object:
         val = new_screen
         
         self.screens[key] = val
+
+    def get_puzzle(self,screen):
+        self.puzzle = Puzzle()
+        self.puzzle.place(0,0,screen)
+
+class Puzzle:
+    def __init__(self):
+        self.grid = [0,0,0,0,0,
+                     0,1,0,0,0,
+                     0,1,0,0,0,
+                     1,0,0,0,0,
+                     1,1,1,0,0]
+
+    def place(self,x,y,screen):
+        self.x = x
+        self.y = y
+        self.screen = screen
         
 class button:
     def __init__(self,wid,hei,art,pressed_art,label_art):
@@ -98,6 +115,10 @@ def draw_game():
                          (0,0))
     pygame.display.flip()
 
+def update_game():
+    # Process clicks and mouse button down
+    pass
+
 def game_main_loop():
     game_quit = False
     LMB_down = False
@@ -106,6 +127,10 @@ def game_main_loop():
     L_click = None
     R_click = None
     Simul_click = None
+    click_x = None
+    click_y = None
+    down_x = None
+    down_y = None
     
     while not game_quit:
         event_list = pygame.event.get()
@@ -126,37 +151,50 @@ def game_main_loop():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     LMB_down = True
-                    Lx,Ly = event.pos
+                    down_x,down_y = event.pos
                 elif event.button == 2:
                     RMB_down = True
-                    Rx,Ry = event.pos
+                    down_x,down_y = event.pos
+            if event.type == pygame.MOUSEBUTTONUP:
+                click_x,click_y = event.pos
+                if event.button == 1:
+                    if RMB_down:
+                        Simul_click = True
+                    else:
+                        L_click = True
+                elif event.button == 2:
+                    if LMB_down:
+                        Simul_click = True
+                    else:
+                        R_click = True
                 
         if GO.active_screen == "intro":
             if LMB_down:
-                GO.screens[GO.active_screen].is_pressed(Lx,Ly,"LEFT")
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
             if RMB_down:
-                GO.screens[GO.active_screen].is_pressed(Rx,Ry,"RIGHT")
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
                 
         elif GO.active_screen == "main":
             if LMB_down:
-                GO.screens[GO.active_screen].is_pressed(Lx,Ly,"LEFT")
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
             if RMB_down:
-                GO.screens[GO.active_screen].is_pressed(Rx,Ry,"RIGHT")
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
                 
         elif GO.active_screen == "high":
             if LMB_down:
-                GO.screens[GO.active_screen].is_pressed(Lx,Ly,"LEFT")
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
             if RMB_down:
-                GO.screens[GO.active_screen].is_pressed(Rx,Ry,"RIGHT")
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
                 
         elif GO.active_screen == "options":
             if LMB_down:
-                GO.screens[GO.active_screen].is_pressed(Lx,Ly,"LEFT")
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
             if RMB_down:
-                GO.screens[GO.active_screen].is_pressed(Rx,Ry,"RIGHT")
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
                 
         else:
             print("No active screen!")
+        update_game()
         draw_game()
         GO.FPS.tick(60)
     quit_nicely()
@@ -186,6 +224,8 @@ def initialize_game():
     GO.add_screen(high_score_screen)
     GO.add_screen(options_screen)
     GO.add_screen(main_screen)
+
+    GO.get_puzzle(main_screen)
 
     # (self,art,pressed_art,label_art)
     new_button = button(64,32,
