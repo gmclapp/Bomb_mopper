@@ -32,7 +32,7 @@ class Puzzle:
         self.screen = screen
         
 class button:
-    def __init__(self,wid,hei,art,pressed_art,label_art):
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None):
         self.pressed = False
         self.active = False
         self.clicked = False
@@ -43,6 +43,7 @@ class button:
         self.art = art
         self.pressed_art = pressed_art
         self.label_art = label_art
+        self.action = action
 
     def place(self,x,y,screen):
         self.x = x
@@ -56,7 +57,7 @@ class button:
         if self.active:
             pass
         if self.clicked:
-            pass
+            self.action()
 
     def draw(self):
         if self.pressed:
@@ -65,8 +66,11 @@ class button:
             self.screen.surf.blit(self.art,(self.x,self.y))
         self.screen.surf.blit(self.label_art,(self.x,self.y))
 
-    def is_clicked(self,mx,my):
-        pass
+    def is_clicked(self,mx,my,MB):
+        if self.x < mx < self.x + self.wid and self.y < my < self.y + self.hei:
+            self.clicked = True
+        else:
+            self.clicked = False
 
     def is_pressed(self,mx,my):
         if self.x < mx < self.x + self.wid and self.y < my < self.y + self.hei:
@@ -94,8 +98,13 @@ class screen:
         for b in self.buttons:
             b.is_pressed(x,y)
 
+    def is_clicked(self,x,y,MB):
+        for b in self.buttons:
+            b.is_clicked(x,y,MB)
+
     def update(self):
-        pass
+        for b in self.buttons:
+            b.update()
 
     def draw(self):
         self.surf.fill(self.BG)
@@ -104,6 +113,9 @@ class screen:
 
     def add_button(self,new_button):
         self.buttons.append(new_button)
+
+    def make_active(self):
+        GO.active_screen = self.name
     
 def quit_nicely():
     pygame.display.quit()
@@ -116,8 +128,7 @@ def draw_game():
     pygame.display.flip()
 
 def update_game():
-    # Process clicks and mouse button down
-    pass
+    GO.screens[GO.active_screen].update()
 
 def game_main_loop():
     game_quit = False
@@ -168,32 +179,16 @@ def game_main_loop():
                     else:
                         R_click = True
                 
-        if GO.active_screen == "intro":
-            if LMB_down:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
-            if RMB_down:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
+        if LMB_down:
+            GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
+        if RMB_down:
+            GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
+        if L_click:
+            GO.screens[GO.active_screen].is_clicked(click_x,click_y,"LEFT")
+        if R_click:
+            GO.screens[GO.active_screen].is_clicked(click_x,click_y,"RIGHT")
                 
-        elif GO.active_screen == "main":
-            if LMB_down:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
-            if RMB_down:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
-                
-        elif GO.active_screen == "high":
-            if LMB_down:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
-            if RMB_down:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
-                
-        elif GO.active_screen == "options":
-            if LMB_down:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
-            if RMB_down:
-                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
-                
-        else:
-            print("No active screen!")
+
         update_game()
         draw_game()
         GO.FPS.tick(60)
@@ -231,17 +226,20 @@ def initialize_game():
     new_button = button(64,32,
                         constants.S_LARGE_BUTTON,
                         constants.S_LARGE_BUTTON_PRESSED,
-                        constants.S_NEW_BUTTON_LABEL)
+                        constants.S_NEW_BUTTON_LABEL,
+                        main_screen.make_active)
     
     options_button = button(64,32,
                             constants.S_LARGE_BUTTON,
                             constants.S_LARGE_BUTTON_PRESSED,
-                            constants.S_OPTION_BUTTON_LABEL)
+                            constants.S_OPTION_BUTTON_LABEL,
+                            options_screen.make_active)
     
     high_score_button = button(64,32,
                                constants.S_LARGE_BUTTON,
                                constants.S_LARGE_BUTTON_PRESSED,
-                               constants.S_HIGH_BUTTON_LABEL)
+                               constants.S_HIGH_BUTTON_LABEL,
+                               high_score_screen.make_active)
 
     new_button.place(150,50,intro_screen)
     options_button.place(215,50,intro_screen)
@@ -250,7 +248,8 @@ def initialize_game():
     back_button = button(64,32,
                          constants.S_LARGE_BUTTON,
                          constants.S_LARGE_BUTTON_PRESSED,
-                         constants.S_BACK_BUTTON_LABEL)
+                         constants.S_BACK_BUTTON_LABEL,
+                         action = intro_screen.make_active)
     
     back_button.place(0,0,main_screen)
     
