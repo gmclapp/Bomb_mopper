@@ -374,14 +374,12 @@ def initialize_game():
 
     for i,site in enumerate(GO.puzzle.grid):
         if site == 1:
-            print("Bomb")
             new_site = Site(16,16,
                             constants.S_SITE,
                             constants.S_SITE_PRESSED,
                             None,
                             mine = True)
         else:
-            print("Not a bomb")
             new_site = Site(16,16,
                             constants.S_SITE,
                             constants.S_SITE_PRESSED,
