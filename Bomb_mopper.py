@@ -37,6 +37,7 @@ class button:
         self.pressed = False
         self.active = False
         self.clicked = False
+        self.Rclicked = False
 
         self.wid = wid
         self.hei = hei
@@ -45,6 +46,7 @@ class button:
         self.pressed_art = pressed_art
         self.label_art = label_art
         self.action = action
+        self.RMB_action = RMB_action
 
     def place(self,x,y,screen):
         self.x = x
@@ -58,8 +60,17 @@ class button:
         if self.active:
             pass
         if self.clicked:
-            self.action()
+            if self.action:
+                self.action()
+            else:
+                print("No action assigned to left mouse button")
             self.clicked = False
+        if self.Rclicked:
+            if self.RMB_action:
+                self.RMB_action()
+            else:
+                print("No action assigned to right mouse button")
+            self.Rclicked = False
 
     def draw(self):
         if self.pressed:
@@ -71,7 +82,10 @@ class button:
 
     def is_clicked(self,mx,my,MB):
         if self.x < mx < self.x + self.wid and self.y < my < self.y + self.hei:
-            self.clicked = True
+            if MB == "LEFT":
+                self.clicked = True
+            if MB == "RIGHT":
+                self.Rclicked = True
         else:
             self.clicked = False
 
@@ -83,7 +97,7 @@ class button:
 
 class Site(button):
     def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,mine=False):
-        super().__init__(wid,hei,art,pressed_art,label_art,action=self.open)
+        super().__init__(wid,hei,art,pressed_art,label_art,action=self.open,RMB_action=self.flag)
         self.mine = mine
         self.flagged = False
         self.questioned = False
@@ -96,6 +110,18 @@ class Site(button):
         else:
             print("Safe!")
 
+    def flag(self):
+        if self.is_questioned():
+            self.questioned = False
+            self.label_art = None
+        elif self.is_flagged():
+            self.questioned = True
+            self.flagged = False
+            self.label_art = constants.S_QUESTION
+        else:
+            self.flagged = True
+            self.label_art = constants.S_FLAG
+            
     def is_mine(self):
         return(self.mine)
     def is_flagged(self):
@@ -199,12 +225,16 @@ def game_main_loop():
                     else:
                         L_click = True
                     LMB_down = False
-                elif event.button == 2:
+                elif event.button == 3:
                     if LMB_down:
                         Simul_click = True
                     else:
                         R_click = True
+                        print("Right click")
                     RMB_down = False
+
+                else:
+                    print("Mouse button {}".format(event.button))
                 
         if LMB_down:
             GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
