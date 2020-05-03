@@ -38,6 +38,12 @@ class Puzzle:
         index = y*self.width + x
         return(self.buttons[index].is_mine())
 
+    def open(self,x,y):
+        if 0 < x < self.width and 0 < y < self.height:
+            index = y*self.width + x
+            if not self.buttons[index].is_opened():
+                self.buttons[index].open()
+
     def set_numbers(self):
         for s in self.buttons:
             if s.is_mine():
@@ -126,6 +132,7 @@ class Site(button):
         self.mine = mine
         self.flagged = False
         self.questioned = False
+        self.opened = False
         self.neighbor_mines = 0
 
     def setxy(self,x,y):
@@ -133,26 +140,35 @@ class Site(button):
         self.grid_y = y
 
     def open(self):
-        self.art = constants.S_EMPTY
-        self.pressed_art = constants.S_EMPTY
-        if self.is_mine():
-            self.label_art = constants.S_BOMB
-            return(-1)
-        else:
-            self.label_art = constants.S_NUMBERS[self.neighbor_mines]
-            return(self.neighbor_mines)
+        if not self.opened:
+            self.opened = True
+            self.art = constants.S_EMPTY
+            self.pressed_art = constants.S_EMPTY
+            if self.is_mine():
+                self.label_art = constants.S_BOMB
+                return(-1)
+            else:
+                self.label_art = constants.S_NUMBERS[self.neighbor_mines]
+                if self.neighbor_mines == 0:
+                    for i in range(-1,2):
+                        for j in range (-1,2):
+                            if not (i == 0 and j == 0):
+                                GO.puzzle.open(self.grid_x+i,self.grid_y+j)
+            
+                return(self.neighbor_mines)
 
     def flag(self):
-        if self.is_questioned():
-            self.questioned = False
-            self.label_art = None
-        elif self.is_flagged():
-            self.questioned = True
-            self.flagged = False
-            self.label_art = constants.S_QUESTION
-        else:
-            self.flagged = True
-            self.label_art = constants.S_FLAG
+        if not self.is_opened():
+            if self.is_questioned():
+                self.questioned = False
+                self.label_art = None
+            elif self.is_flagged():
+                self.questioned = True
+                self.flagged = False
+                self.label_art = constants.S_QUESTION
+            else:
+                self.flagged = True
+                self.label_art = constants.S_FLAG
             
     def is_mine(self):
         return(self.mine)
@@ -160,6 +176,8 @@ class Site(button):
         return(self.flagged)
     def is_questioned(self):
         return(self.questioned)
+    def is_opened(self):
+        return(self.opened)
 
 class screen:
     def __init__(self, name,
