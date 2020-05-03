@@ -7,6 +7,8 @@ class game_object:
     def __init__(self):
         self.active_screen = "intro" # intro, main, high, options
         self.screens = {}
+        self.won = False
+        self.lost = False
         
     def add_screen(self,new_screen):
         key = new_screen.name
@@ -20,13 +22,14 @@ class game_object:
 
 class Puzzle:
     def __init__(self):
-        self.grid = [0,0,0,0,0,
-                     0,1,0,0,0,
-                     0,1,0,0,0,
-                     1,0,0,0,0,
-                     1,1,1,0,0]
-        self.width = 5
-        self.height = 5
+        self.grid = [0,0,0,0,0,0,
+                     0,1,0,0,0,1,
+                     0,1,0,0,0,0,
+                     1,0,0,0,0,0,
+                     1,1,1,0,0,1,
+                     0,0,0,0,1,0]
+        self.width = 6
+        self.height = 6
         self.buttons = []
 
     def place(self,x,y,screen):
@@ -44,6 +47,19 @@ class Puzzle:
             if not self.buttons[index].is_opened():
                 self.buttons[index].open()
 
+    def chain_reaction(self):
+        for b in self.buttons:
+            if b.is_mine() and not b.is_opened():
+                b.open()
+
+    def win_check(self):
+        count = 0
+        for b in self.buttons:
+            if not b.is_mine() and not b.is_opened():
+                count += 1
+        if count == 0:
+            GO.won = True
+            
     def set_numbers(self):
         for s in self.buttons:
             if s.is_mine():
@@ -53,7 +69,7 @@ class Puzzle:
                     for j in range(-1,2):
                         if i == 0 and j == 0:
                             pass
-                        elif s.grid_x+i < 0 or s.grid_x+1 > self.width-1:
+                        elif s.grid_x+i < 0 or s.grid_x+i > self.width-1:
                             pass
                         elif s.grid_y+j < 0 or s.grid_y+j > self.height-1:
                             pass
@@ -144,6 +160,7 @@ class Site(button):
             self.pressed_art = constants.S_EMPTY
             if self.is_mine():
                 self.label_art = constants.S_BOMB
+                GO.lost = True
                 return(-1)
             else:
                 self.label_art = constants.S_NUMBERS[self.neighbor_mines]
@@ -226,7 +243,21 @@ def draw_game():
                          (0,0))
     pygame.display.flip()
 
+def lose_game():
+    print("YOU LOSE!")
+    GO.puzzle.chain_reaction()
+    GO.lost = False
+
+def win_game():
+    print("YOU WIN!")
+    GO.won = False
+    
 def update_game():
+    if GO.lost:
+        lose_game()
+    GO.puzzle.win_check()
+    if GO.won:
+        win_game()
     GO.screens[GO.active_screen].update()
 
 def game_main_loop():
