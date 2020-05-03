@@ -25,6 +25,7 @@ class Puzzle:
                      0,1,0,0,0,
                      1,0,0,0,0,
                      1,1,1,0,0]
+        self.width = 5
 
     def place(self,x,y,screen):
         self.x = x
@@ -32,7 +33,7 @@ class Puzzle:
         self.screen = screen
         
 class button:
-    def __init__(self,wid,hei,art,pressed_art,label_art,action=None):
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None):
         self.pressed = False
         self.active = False
         self.clicked = False
@@ -58,13 +59,15 @@ class button:
             pass
         if self.clicked:
             self.action()
+            self.clicked = False
 
     def draw(self):
         if self.pressed:
             self.screen.surf.blit(self.pressed_art,(self.x,self.y))
         else:
             self.screen.surf.blit(self.art,(self.x,self.y))
-        self.screen.surf.blit(self.label_art,(self.x,self.y))
+        if self.label_art:
+            self.screen.surf.blit(self.label_art,(self.x,self.y))
 
     def is_clicked(self,mx,my,MB):
         if self.x < mx < self.x + self.wid and self.y < my < self.y + self.hei:
@@ -77,6 +80,28 @@ class button:
             self.pressed = True
         else:
             self.pressed = False
+
+class Site(button):
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,mine=False):
+        super().__init__(wid,hei,art,pressed_art,label_art,action=self.open)
+        self.mine = mine
+        self.flagged = False
+        self.questioned = False
+
+    def open(self):
+        self.art = constants.S_EMPTY
+        self.pressed_art = constants.S_EMPTY
+        if self.is_mine():
+            self.label_art = constants.S_BOMB
+        else:
+            print("Safe!")
+
+    def is_mine(self):
+        return(self.mine)
+    def is_flagged(self):
+        return(self.flagged)
+    def is_questioned(self):
+        return(self.questioned)
 
 class screen:
     def __init__(self, name,
@@ -173,11 +198,13 @@ def game_main_loop():
                         Simul_click = True
                     else:
                         L_click = True
+                    LMB_down = False
                 elif event.button == 2:
                     if LMB_down:
                         Simul_click = True
                     else:
                         R_click = True
+                    RMB_down = False
                 
         if LMB_down:
             GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
@@ -185,8 +212,10 @@ def game_main_loop():
             GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
         if L_click:
             GO.screens[GO.active_screen].is_clicked(click_x,click_y,"LEFT")
+            L_click = False
         if R_click:
             GO.screens[GO.active_screen].is_clicked(click_x,click_y,"RIGHT")
+            R_click = False
                 
 
         update_game()
@@ -250,8 +279,39 @@ def initialize_game():
                          constants.S_LARGE_BUTTON_PRESSED,
                          constants.S_BACK_BUTTON_LABEL,
                          action = intro_screen.make_active)
+    back_button2 = button(64,32,
+                         constants.S_LARGE_BUTTON,
+                         constants.S_LARGE_BUTTON_PRESSED,
+                         constants.S_BACK_BUTTON_LABEL,
+                         action = intro_screen.make_active)
+    back_button3 = button(64,32,
+                         constants.S_LARGE_BUTTON,
+                         constants.S_LARGE_BUTTON_PRESSED,
+                         constants.S_BACK_BUTTON_LABEL,
+                         action = intro_screen.make_active)
     
     back_button.place(0,0,main_screen)
+    back_button2.place(0,0,high_score_screen)
+    back_button3.place(0,0,options_screen)
+
+    for i,site in enumerate(GO.puzzle.grid):
+        if site == 1:
+            print("Bomb")
+            new_site = Site(16,16,
+                            constants.S_SITE,
+                            constants.S_SITE_PRESSED,
+                            None,
+                            mine = True)
+        else:
+            print("Not a bomb")
+            new_site = Site(16,16,
+                            constants.S_SITE,
+                            constants.S_SITE_PRESSED,
+                            None,
+                            mine = False)
+        site_x = constants.PUZZLE_PAD_X + (i%GO.puzzle.width)*16
+        site_y = constants.PUZZLE_PAD_Y + int(i/GO.puzzle.width)*16
+        new_site.place(site_x,site_y,main_screen)
     
     
     return(GO)

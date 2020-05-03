@@ -2,6 +2,8 @@ import pygame
 
 GAME_WIDTH = 600
 GAME_HEIGHT = 900
+PUZZLE_PAD_X = 50
+PUZZLE_PAD_Y = 50
 
 DEFAULT_BG = (200,0,0)
 
@@ -13,5 +15,24 @@ S_NEW_BUTTON_LABEL = pygame.image.load("art/New Game.png")
 S_BACK_BUTTON_LABEL = pygame.image.load("art/Back.png")
 S_HIGH_BUTTON_LABEL = pygame.image.load("art/High Score.png")
 S_OPTION_BUTTON_LABEL = pygame.image.load("art/Options.png")
+
+S_SITE = pygame.image.load("art/Button.png")
+S_SITE_PRESSED = pygame.image.load("art/Button pressed.png")
+S_FLAG = pygame.image.load("art/Flag.png")
+S_EMPTY = pygame.image.load("art/Empty.png")
+S_QUESTION = pygame.image.load("art/Question mark.png")
+
+S_1 = pygame.image.load("art/One.png")
+S_2 = pygame.image.load("art/Two.png")
+S_3 = pygame.image.load("art/Three.png")
+S_4 = pygame.image.load("art/Four.png")
+S_5 = pygame.image.load("art/Five.png")
+S_6 = pygame.image.load("art/Six.png")
+S_7 = pygame.image.load("art/Seven.png")
+S_8 = pygame.image.load("art/Eight.png")
+S_9 = pygame.image.load("art/Nine.png")
+S_0 = pygame.image.load("art/Zero.png")
+
+                        
 
 
