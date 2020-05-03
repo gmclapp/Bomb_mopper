@@ -33,6 +33,17 @@ S_8 = pygame.image.load("art/Eight.png")
 S_9 = pygame.image.load("art/Nine.png")
 S_0 = pygame.image.load("art/Zero.png")
 
+S_NUMBERS = {1:S_1,
+             2:S_2,
+             3:S_3,
+             4:S_4,
+             5:S_5,
+             6:S_6,
+             7:S_7,
+             8:S_8,
+             9:S_9,
+             0:S_0}
+
                         
 
 

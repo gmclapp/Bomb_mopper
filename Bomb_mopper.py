@@ -26,11 +26,36 @@ class Puzzle:
                      1,0,0,0,0,
                      1,1,1,0,0]
         self.width = 5
+        self.height = 5
+        self.buttons = []
 
     def place(self,x,y,screen):
         self.x = x
         self.y = y
         self.screen = screen
+
+    def is_mine(self,x,y):
+        index = y*self.width + x
+        return(self.buttons[index].is_mine())
+
+    def set_numbers(self):
+        for s in self.buttons:
+            if s.is_mine():
+                s.neighbor_mines = 0
+            else:
+                print("{},{} is not a mine.".format(s.grid_x,s.grid_y))
+                for i in range(-1,2):
+                    for j in range(-1,2):
+                        if i == 0 and j == 0:
+                            pass
+                        elif s.grid_x+i < 0 or s.grid_x+1 > self.width-1:
+                            pass
+                        elif s.grid_y+j < 0 or s.grid_y+j > self.height-1:
+                            pass
+                        else:
+                            if self.is_mine(s.grid_x+i,s.grid_y+j):
+                                s.neighbor_mines += 1
+                print("Site {},{} touches {} mines.".format(s.grid_x,s.grid_y,s.neighbor_mines))
         
 class button:
     def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None):
@@ -101,14 +126,21 @@ class Site(button):
         self.mine = mine
         self.flagged = False
         self.questioned = False
+        self.neighbor_mines = 0
+
+    def setxy(self,x,y):
+        self.grid_x = x
+        self.grid_y = y
 
     def open(self):
         self.art = constants.S_EMPTY
         self.pressed_art = constants.S_EMPTY
         if self.is_mine():
             self.label_art = constants.S_BOMB
+            return(-1)
         else:
-            print("Safe!")
+            self.label_art = constants.S_NUMBERS[self.neighbor_mines]
+            return(self.neighbor_mines)
 
     def flag(self):
         if self.is_questioned():
@@ -339,9 +371,14 @@ def initialize_game():
                             constants.S_SITE_PRESSED,
                             None,
                             mine = False)
-        site_x = constants.PUZZLE_PAD_X + (i%GO.puzzle.width)*16
-        site_y = constants.PUZZLE_PAD_Y + int(i/GO.puzzle.width)*16
-        new_site.place(site_x,site_y,main_screen)
+        site_x = i%GO.puzzle.width
+        site_y = int(i/GO.puzzle.width)
+        new_site.setxy(site_x,site_y)
+        site_art_x = constants.PUZZLE_PAD_X + site_x*16
+        site_art_y = constants.PUZZLE_PAD_Y + site_y*16
+        new_site.place(site_art_x,site_art_y,main_screen)
+        GO.puzzle.buttons.append(new_site)
+    GO.puzzle.set_numbers()
     
     
     return(GO)
