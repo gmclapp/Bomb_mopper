@@ -39,7 +39,7 @@ class Puzzle:
         return(self.buttons[index].is_mine())
 
     def open(self,x,y):
-        if 0 < x < self.width and 0 < y < self.height:
+        if 0 <= x < self.width and 0 <= y < self.height:
             index = y*self.width + x
             if not self.buttons[index].is_opened():
                 self.buttons[index].open()
@@ -49,7 +49,6 @@ class Puzzle:
             if s.is_mine():
                 s.neighbor_mines = 0
             else:
-                print("{},{} is not a mine.".format(s.grid_x,s.grid_y))
                 for i in range(-1,2):
                     for j in range(-1,2):
                         if i == 0 and j == 0:
@@ -61,7 +60,6 @@ class Puzzle:
                         else:
                             if self.is_mine(s.grid_x+i,s.grid_y+j):
                                 s.neighbor_mines += 1
-                print("Site {},{} touches {} mines.".format(s.grid_x,s.grid_y,s.neighbor_mines))
         
 class button:
     def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None):
