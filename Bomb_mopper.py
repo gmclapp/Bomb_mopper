@@ -140,6 +140,16 @@ class button:
         else:
             self.pressed = False
 
+class Label(button):
+    def __init__(self,text):
+        super().__init__(0,0,None,None,None,action=None,RMB_action=None)
+        self.text = text
+        self.font = pygame.font.Font(None,16)
+        self.txt_surface = self.font.render(self.text,True,(0,0,0),16)
+
+    def draw(self):
+        self.screen.surf.blit(self.txt_surface,(self.x,self.y))
+        
 class RadioButtonManager:
     def __init__(self,var):
         self.var = var
@@ -479,6 +489,16 @@ def initialize_game():
     intermediate_button.place(40,60,options_screen)
     expert_button.place(40,80,options_screen)
     custom_button.place(40,100,options_screen)
+    
+    beginner_label = Label("Beginner")
+    intermediate_label = Label("Intermediate")
+    expert_label = Label("Expert")
+    custom_label = Label("Custom")
+
+    beginner_label.place(60,40,options_screen)
+    intermediate_label.place(60,60,options_screen)
+    expert_label.place(60,80,options_screen)
+    custom_label.place(60,100,options_screen)
 
     for i,site in enumerate(GO.puzzle.grid):
         if site == 1:
