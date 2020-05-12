@@ -15,6 +15,7 @@ class game_object:
         self.hei = 6
         self.mines = 6
         self.game_mode = Var()
+        self.puzzle = None
         
     def add_screen(self,new_screen):
         key = new_screen.name
@@ -23,6 +24,9 @@ class game_object:
         self.screens[key] = val
 
     def get_puzzle(self,screen):
+        if self.puzzle:
+            for b in self.puzzle.buttons:
+                GO.screens['main'].remove_button(b)
         self.puzzle = Puzzle(self.wid,self.hei,self.mines,self)
         self.puzzle.place(0,0,screen)
         self.lost = False
@@ -36,6 +40,7 @@ class game_object:
                                                                          self.hei,
                                                                          self.mines))
                 self.get_puzzle(self.screens['main'])
+                print(self.puzzle)
             else:
                 pass
             
@@ -66,12 +71,23 @@ class Puzzle:
         self.buttons = []
         self.grid = []
         
-        for i,item in enumerate(range(self.width*self.height)):
-            if i < self.mines:
-                self.grid.append(1)
-            else:
-                self.grid.append(0)
-        random.shuffle(self.grid)
+##        for i,item in enumerate(range(self.width*self.height)):
+##            if i < self.mines:
+##                self.grid.append(1)
+##            else:
+##                self.grid.append(0)
+##        random.shuffle(self.grid)
+
+        self.grid = [0,0,0,0,0,0,0,1,0,
+                     1,1,0,0,1,0,0,0,0,
+                     0,0,0,0,0,0,1,0,0,
+                     0,1,0,0,0,0,0,0,0,
+                     0,0,0,0,0,0,0,0,0,
+                     1,0,0,0,0,0,0,0,0,
+                     0,1,0,0,0,0,0,0,1,
+                     0,0,0,0,0,0,0,0,0,
+                     0,1,0,0,0,1,1,0,0]
+                     
         
         for i,site in enumerate(self.grid):
             if site == 1:
@@ -94,6 +110,18 @@ class Puzzle:
             new_site.place(site_art_x,site_art_y,GO.screens['main'])
             self.buttons.append(new_site)
         self.set_numbers()
+
+    def __str__(self):
+        string = ''
+        for i,b in enumerate(self.buttons):
+            if b.is_mine():
+                string += ' * '
+            else:
+                string += ' {} '.format(b.neighbor_mines)
+            if i%self.width == self.width-1:
+                string += '\n'
+        return(string)
+                
     
 
     def place(self,x,y,screen):
@@ -285,17 +313,17 @@ class Site(button):
 ##                return(-1)
             else:
                 self.label_art = constants.S_NUMBERS[self.neighbor_mines]
-##                if self.neighbor_mines == 0:
-##                    print("{},{} has {} neighbors.".format(self.grid_x,
-##                                                           self.grid_y,
-##                                                           self.neighbor_mines))
-##                    print("Opening neighbors")
-##                    for i in range(-1,2):
-##                        for j in range (-1,2):
-##                            if not (i == 0 and j == 0):
-##                                GO.puzzle.open(self.grid_x+i,self.grid_y+j)
+                if self.neighbor_mines == 0:
+                    print("{},{} has {} neighbors.".format(self.grid_x,
+                                                           self.grid_y,
+                                                           self.neighbor_mines))
+                    print("Opening neighbors")
+                    for i in range(-1,2):
+                        for j in range (-1,2):
+                            if not (i == 0 and j == 0):
+                                GO.puzzle.open(self.grid_x+i,self.grid_y+j)
             
-##                return(self.neighbor_mines)
+                return(self.neighbor_mines)
 
     def flag(self):
         if not self.is_opened():
@@ -354,6 +382,9 @@ class screen:
 
     def add_button(self,new_button):
         self.buttons.append(new_button)
+
+    def remove_button(self,button):
+        self.buttons.remove(button)
 
     def make_active(self):
         GO.change_active_screen(self.name)
