@@ -140,21 +140,46 @@ class button:
         else:
             self.pressed = False
 
-class Radiobutton(button):
-    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,var=None):
-        super().__init__(wid,hei,art,pressed_art,label_art,action=self.toggle_var,RMB_action=None)
+class RadioButtonManager:
+    def __init__(self,var):
         self.var = var
+        self.button_list = []
 
+    def add_button(self,button):
+        button.setParent(self)
+        button.setIndex(len(self.button_list))
+        self.button_list.append(button)
+
+    def toggle_button(self,index):
+        '''Called by one of the buttons in the button list, this tells the parent object to
+        turn off other buttons in the manager if they're active.'''
+        self.var.set(index)
+        for b in self.button_list:
+            if b.index == index:
+                b.art = constants.S_RADIO_SELECTED
+                b.pressed_art = constants.S_RADIO_SELECTED
+            else:
+                b.art = constants.S_RADIO
+                b.pressed_art = constants.S_RADIO
+
+class Radiobutton(button):
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None):
+        super().__init__(wid,hei,art,pressed_art,label_art,action=self.toggle_var,RMB_action=None)
+        
     def toggle_var(self):
-        self.var.set(not self.var.get())
-        if self.var.get():
-            self.art = constants.S_RADIO_SELECTED
-        else:
-            self.art = constants.S_RADIO
+        '''Tells the parent manager that this button has been pushed so it can reassign update the
+        relevant variable.'''
+        self.parent.toggle_button(self.index)
+
+    def setParent(self,parent):
+        self.parent = parent
+
+    def setIndex(self,index):
+        self.index = index
 
 class Var:
     def __init__(self):
-        self.val = False
+        self.val = 0
 
     def set(self,new):
         self.val = new
@@ -424,6 +449,36 @@ def initialize_game():
     back_button.place(0,0,main_screen)
     back_button2.place(0,0,high_score_screen)
     back_button3.place(0,0,options_screen)
+
+    beginner_button = Radiobutton(16,16,
+                                  constants.S_RADIO,
+                                  constants.S_RADIO,
+                                  None)
+    intermediate_button = Radiobutton(16,16,
+                                  constants.S_RADIO,
+                                  constants.S_RADIO,
+                                  None)
+    expert_button = Radiobutton(16,16,
+                                  constants.S_RADIO,
+                                  constants.S_RADIO,
+                                  None)
+    custom_button = Radiobutton(16,16,
+                                  constants.S_RADIO,
+                                  constants.S_RADIO,
+                                  None)
+
+    GO.game_mode = Var()
+    game_mode_manager = RadioButtonManager(GO.game_mode)
+    game_mode_manager.add_button(beginner_button)
+    game_mode_manager.add_button(intermediate_button)
+    game_mode_manager.add_button(expert_button)
+    game_mode_manager.add_button(custom_button)
+    beginner_button.toggle_var() # On start up, this button will be selected.
+
+    beginner_button.place(40,40,options_screen)
+    intermediate_button.place(40,60,options_screen)
+    expert_button.place(40,80,options_screen)
+    custom_button.place(40,100,options_screen)
 
     for i,site in enumerate(GO.puzzle.grid):
         if site == 1:
