@@ -140,6 +140,28 @@ class button:
         else:
             self.pressed = False
 
+class Radiobutton(button):
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,var):
+        super().__init__(wid,hei,art,pressed_art,label_art,action=self.toggle_var,RMB_action=None)
+        self.var = var
+
+    def toggle_var(self):
+        self.var.set(not self.var.get())
+        if self.var.get():
+            self.art = constants.S_RADIO_SELECTED
+        else:
+            self.art = constants.S_RADIO
+
+class Var:
+    def __init__(self):
+        self.val = False
+
+    def set(self,new):
+        self.val = new
+
+    def get(self):
+        return(self.val)
+
 class Site(button):
     def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,mine=False):
         super().__init__(wid,hei,art,pressed_art,label_art,action=self.open,RMB_action=self.flag)
