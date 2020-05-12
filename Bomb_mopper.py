@@ -14,6 +14,7 @@ class game_object:
         self.wid = 6
         self.hei = 6
         self.mines = 6
+        self.game_mode = Var()
         
     def add_screen(self,new_screen):
         key = new_screen.name
@@ -22,23 +23,78 @@ class game_object:
         self.screens[key] = val
 
     def get_puzzle(self,screen):
-        self.puzzle = Puzzle(self.wid,self.hei,self.mines)
+        self.puzzle = Puzzle(self.wid,self.hei,self.mines,self)
         self.puzzle.place(0,0,screen)
+        self.lost = False
+        self.won = False
+
+    def change_active_screen(self,screen):
+        if self.active_screen != screen:
+            self.active_screen = screen
+            if screen == 'main':
+                print("Getting a new {}x{} puzzle with {} mines.".format(self.wid,
+                                                                         self.hei,
+                                                                         self.mines))
+                self.get_puzzle(self.screens['main'])
+            else:
+                pass
+            
+        
+
+    def update(self):
+        if self.game_mode.get() == 0: # Beginner
+            self.wid = 9
+            self.hei = 9
+            self.mines = 10
+        elif self.game_mode.get() == 1: # Intermediate
+            self.wid = 16
+            self.hei = 16
+            self.mines = 40
+        elif self.game_mode.get() == 2: # Expert
+            self.wid = 32
+            self.hei = 16
+            self.mines = 99
+        elif self.game_mode.get() == 3: # Custom
+            pass
 
 class Puzzle:
-    def __init__(self,wid,hei,mines):
-        self.grid = []
-        for i,item in enumerate(range(wid*hei)):
-            if i < mines:
-                self.grid.append(1)
-            else:
-                self.grid.append(0)
-        random.shuffle(self.grid)
-                
+    def __init__(self,wid,hei,mines,GO):
+         
         self.width = wid
         self.height = hei
         self.mines = mines
         self.buttons = []
+        self.grid = []
+        
+        for i,item in enumerate(range(self.width*self.height)):
+            if i < self.mines:
+                self.grid.append(1)
+            else:
+                self.grid.append(0)
+        random.shuffle(self.grid)
+        
+        for i,site in enumerate(self.grid):
+            if site == 1:
+                new_site = Site(16,16,
+                                constants.S_SITE,
+                                constants.S_SITE_PRESSED,
+                                None,
+                                mine = True)
+            else:
+                new_site = Site(16,16,
+                                constants.S_SITE,
+                                constants.S_SITE_PRESSED,
+                                None,
+                                mine = False)
+            site_x = i%self.width
+            site_y = int(i/self.width)
+            new_site.setxy(site_x,site_y)
+            site_art_x = constants.PUZZLE_PAD_X + site_x*16
+            site_art_y = constants.PUZZLE_PAD_Y + site_y*16
+            new_site.place(site_art_x,site_art_y,GO.screens['main'])
+            self.buttons.append(new_site)
+        self.set_numbers()
+    
 
     def place(self,x,y,screen):
         self.x = x
@@ -70,20 +126,18 @@ class Puzzle:
             
     def set_numbers(self):
         for s in self.buttons:
-            if s.is_mine():
-                s.neighbor_mines = 0
-            else:
-                for i in range(-1,2):
-                    for j in range(-1,2):
-                        if i == 0 and j == 0:
-                            pass
-                        elif s.grid_x+i < 0 or s.grid_x+i > self.width-1:
-                            pass
-                        elif s.grid_y+j < 0 or s.grid_y+j > self.height-1:
-                            pass
-                        else:
-                            if self.is_mine(s.grid_x+i,s.grid_y+j):
-                                s.neighbor_mines += 1
+            s.neighbor_mines = 0
+            for i in range(-1,2):
+                for j in range(-1,2):
+                    if i == 0 and j == 0:
+                        pass
+                    elif s.grid_x+i < 0 or s.grid_x+i > self.width-1:
+                        pass
+                    elif s.grid_y+j < 0 or s.grid_y+j > self.height-1:
+                        pass
+                    else:
+                        if self.is_mine(s.grid_x+i,s.grid_y+j):
+                            s.neighbor_mines += 1
         
 class button:
     def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None):
@@ -118,6 +172,7 @@ class button:
             else:
                 print("No action assigned to left mouse button")
             self.clicked = False
+            self.pressed = False
         if self.Rclicked:
             if self.RMB_action:
                 self.RMB_action()
@@ -226,16 +281,21 @@ class Site(button):
             if self.is_mine():
                 self.label_art = constants.S_BOMB
                 GO.lost = True
-                return(-1)
+                print("{},{} is a mine!".format(self.grid_x,self.grid_y))
+##                return(-1)
             else:
                 self.label_art = constants.S_NUMBERS[self.neighbor_mines]
-                if self.neighbor_mines == 0:
-                    for i in range(-1,2):
-                        for j in range (-1,2):
-                            if not (i == 0 and j == 0):
-                                GO.puzzle.open(self.grid_x+i,self.grid_y+j)
+##                if self.neighbor_mines == 0:
+##                    print("{},{} has {} neighbors.".format(self.grid_x,
+##                                                           self.grid_y,
+##                                                           self.neighbor_mines))
+##                    print("Opening neighbors")
+##                    for i in range(-1,2):
+##                        for j in range (-1,2):
+##                            if not (i == 0 and j == 0):
+##                                GO.puzzle.open(self.grid_x+i,self.grid_y+j)
             
-                return(self.neighbor_mines)
+##                return(self.neighbor_mines)
 
     def flag(self):
         if not self.is_opened():
@@ -296,7 +356,8 @@ class screen:
         self.buttons.append(new_button)
 
     def make_active(self):
-        GO.active_screen = self.name
+        GO.change_active_screen(self.name)
+##        GO.active_screen = self.name
     
 def quit_nicely():
     pygame.display.quit()
@@ -323,6 +384,7 @@ def update_game():
     GO.puzzle.win_check()
     if GO.won:
         win_game()
+    GO.update()
     GO.screens[GO.active_screen].update()
 
 def game_main_loop():
@@ -485,7 +547,6 @@ def initialize_game():
                                   constants.S_RADIO,
                                   None)
 
-    GO.game_mode = Var()
     game_mode_manager = RadioButtonManager(GO.game_mode)
     game_mode_manager.add_button(beginner_button)
     game_mode_manager.add_button(intermediate_button)
@@ -506,30 +567,7 @@ def initialize_game():
     beginner_label.place(60,40,options_screen)
     intermediate_label.place(60,60,options_screen)
     expert_label.place(60,80,options_screen)
-    custom_label.place(60,100,options_screen)
-
-    for i,site in enumerate(GO.puzzle.grid):
-        if site == 1:
-            new_site = Site(16,16,
-                            constants.S_SITE,
-                            constants.S_SITE_PRESSED,
-                            None,
-                            mine = True)
-        else:
-            new_site = Site(16,16,
-                            constants.S_SITE,
-                            constants.S_SITE_PRESSED,
-                            None,
-                            mine = False)
-        site_x = i%GO.puzzle.width
-        site_y = int(i/GO.puzzle.width)
-        new_site.setxy(site_x,site_y)
-        site_art_x = constants.PUZZLE_PAD_X + site_x*16
-        site_art_y = constants.PUZZLE_PAD_Y + site_y*16
-        new_site.place(site_art_x,site_art_y,main_screen)
-        GO.puzzle.buttons.append(new_site)
-    GO.puzzle.set_numbers()
-    
+    custom_label.place(60,100,options_screen) 
     
     return(GO)
 
