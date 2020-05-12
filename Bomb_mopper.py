@@ -71,22 +71,22 @@ class Puzzle:
         self.buttons = []
         self.grid = []
         
-##        for i,item in enumerate(range(self.width*self.height)):
-##            if i < self.mines:
-##                self.grid.append(1)
-##            else:
-##                self.grid.append(0)
-##        random.shuffle(self.grid)
+        for i,item in enumerate(range(self.width*self.height)):
+            if i < self.mines:
+                self.grid.append(1)
+            else:
+                self.grid.append(0)
+        random.shuffle(self.grid)
 
-        self.grid = [0,0,0,0,0,0,0,1,0,
-                     1,1,0,0,1,0,0,0,0,
-                     0,0,0,0,0,0,1,0,0,
-                     0,1,0,0,0,0,0,0,0,
-                     0,0,0,0,0,0,0,0,0,
-                     1,0,0,0,0,0,0,0,0,
-                     0,1,0,0,0,0,0,0,1,
-                     0,0,0,0,0,0,0,0,0,
-                     0,1,0,0,0,1,1,0,0]
+##        self.grid = [0,0,0,0,0,0,0,1,0,
+##                     1,1,0,0,1,0,0,0,0,
+##                     0,0,0,0,0,0,1,0,0,
+##                     0,1,0,0,0,0,0,0,0,
+##                     0,0,0,0,0,0,0,0,0,
+##                     1,0,0,0,0,0,0,0,0,
+##                     0,1,0,0,0,0,0,0,1,
+##                     0,0,0,0,0,0,0,0,0,
+##                     0,1,0,0,0,1,1,0,0]
                      
         
         for i,site in enumerate(self.grid):
