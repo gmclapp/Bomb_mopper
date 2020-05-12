@@ -25,6 +25,9 @@ S_FLAG = pygame.image.load("art/Flag.png")
 S_EMPTY = pygame.image.load("art/Empty.png")
 S_QUESTION = pygame.image.load("art/Question mark.png")
 
+S_NEW = pygame.image.load("art/New Game small.png")
+S_WON = pygame.image.load("art/Won game small.png")
+
 S_1 = pygame.image.load("art/One.png")
 S_2 = pygame.image.load("art/Two.png")
 S_3 = pygame.image.load("art/Three.png")

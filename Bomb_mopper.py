@@ -16,19 +16,27 @@ class game_object:
         self.mines = 6
         self.game_mode = Var()
         self.puzzle = None
-        
+        self.stats = {'Beginner': [],
+                      'Intermediate': [],
+                      'Expert':[]}
+
+    def load_stats(self):
+        pass
+    def save_stats(self):
+        pass
+    
     def add_screen(self,new_screen):
         key = new_screen.name
         val = new_screen
         
         self.screens[key] = val
 
-    def get_puzzle(self,screen):
+    def get_puzzle(self):
         if self.puzzle:
             for b in self.puzzle.buttons:
-                GO.screens['main'].remove_button(b)
+                self.screens['main'].remove_button(b)
         self.puzzle = Puzzle(self.wid,self.hei,self.mines,self)
-        self.puzzle.place(0,0,screen)
+        self.puzzle.place(0,0,self.screens['main'])
         self.lost = False
         self.won = False
 
@@ -39,7 +47,7 @@ class game_object:
                 print("Getting a new {}x{} puzzle with {} mines.".format(self.wid,
                                                                          self.hei,
                                                                          self.mines))
-                self.get_puzzle(self.screens['main'])
+                self.get_puzzle()
                 print(self.puzzle)
             else:
                 pass
@@ -61,6 +69,9 @@ class game_object:
             self.mines = 99
         elif self.game_mode.get() == 3: # Custom
             pass
+        if not self.puzzle.finished:
+            GO.current_time = time.time() - self.puzzle.start_time
+            self.time.set("{:4.2f}".format(GO.current_time))
 
 class Puzzle:
     def __init__(self,wid,hei,mines,GO):
@@ -68,8 +79,12 @@ class Puzzle:
         self.width = wid
         self.height = hei
         self.mines = mines
+        GO.bombs.set(mines)
         self.buttons = []
         self.grid = []
+        self.start_time = time.time()
+        self.finish_time = None
+        self.finished = False
         
         for i,item in enumerate(range(self.width*self.height)):
             if i < self.mines:
@@ -168,12 +183,13 @@ class Puzzle:
                             s.neighbor_mines += 1
         
 class button:
-    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None):
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,Simul_action=None):
         self.pressed = False
         self.active = False
         self.clicked = False
         self.Rclicked = False
-
+        self.Simul_clicked = False
+        
         self.wid = wid
         self.hei = hei
 
@@ -182,6 +198,7 @@ class button:
         self.label_art = label_art
         self.action = action
         self.RMB_action = RMB_action
+        self.Simul_action = Simul_action
 
     def place(self,x,y,screen):
         self.x = x
@@ -207,6 +224,15 @@ class button:
             else:
                 print("No action assigned to right mouse button")
             self.Rclicked = False
+            self.pressed = False
+            
+        if self.Simul_clicked:
+            if self.Simul_action:
+                self.Simul_action()
+            else:
+                print("No action assigned to a simultaneous click.")
+                self.Simul_clicked = False
+                self.pressed = False
 
     def draw(self):
         if self.pressed:
@@ -222,6 +248,8 @@ class button:
                 self.clicked = True
             if MB == "RIGHT":
                 self.Rclicked = True
+            if MB == "BOTH":
+                self.Simul_clicked = True
         else:
             self.clicked = False
 
@@ -236,9 +264,11 @@ class Label(button):
         super().__init__(0,0,None,None,None,action=None,RMB_action=None)
         self.text = text
         self.font = pygame.font.Font(None,16)
-        self.txt_surface = self.font.render(self.text,True,(0,0,0),16)
+        self.txt_surface = self.font.render(self.text.get(),True,(0,0,0),16)
 
     def draw(self):
+        self.font = pygame.font.Font(None,16)
+        self.txt_surface = self.font.render(self.text.get(),True,(0,0,0),16)
         self.screen.surf.blit(self.txt_surface,(self.x,self.y))
         
 class RadioButtonManager:
@@ -288,9 +318,19 @@ class Var:
     def get(self):
         return(self.val)
 
+class stringVar:
+    def __init__(self,val=''):
+        self.val = val
+    def __str__(self):
+        return(self.val)
+    def set(self,new):
+        self.val = str(new)
+    def get(self):
+        return(self.val)
+
 class Site(button):
-    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,mine=False):
-        super().__init__(wid,hei,art,pressed_art,label_art,action=self.open,RMB_action=self.flag)
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,Simul_action=None,mine=False):
+        super().__init__(wid,hei,art,pressed_art,label_art,action=self.open,RMB_action=self.flag,Simul_action=self.open_neighbors)
         self.mine = mine
         self.flagged = False
         self.questioned = False
@@ -302,7 +342,7 @@ class Site(button):
         self.grid_y = y
 
     def open(self):
-        if not self.opened:
+        if not self.is_opened() and not self.is_flagged() and not self.is_questioned() and not GO.puzzle.finished:
             self.opened = True
             self.art = constants.S_EMPTY
             self.pressed_art = constants.S_EMPTY
@@ -310,32 +350,32 @@ class Site(button):
                 self.label_art = constants.S_BOMB
                 GO.lost = True
                 print("{},{} is a mine!".format(self.grid_x,self.grid_y))
-##                return(-1)
             else:
-                self.label_art = constants.S_NUMBERS[self.neighbor_mines]
                 if self.neighbor_mines == 0:
-                    print("{},{} has {} neighbors.".format(self.grid_x,
-                                                           self.grid_y,
-                                                           self.neighbor_mines))
-                    print("Opening neighbors")
-                    for i in range(-1,2):
-                        for j in range (-1,2):
-                            if not (i == 0 and j == 0):
-                                GO.puzzle.open(self.grid_x+i,self.grid_y+j)
+                    self.open_neighbors()
+                else:
+                    self.label_art = constants.S_NUMBERS[self.neighbor_mines]
             
                 return(self.neighbor_mines)
+    def open_neighbors(self):
+        for i in range(-1,2):
+            for j in range (-1,2):
+                if not (i == 0 and j == 0):
+                    GO.puzzle.open(self.grid_x+i,self.grid_y+j)
 
     def flag(self):
-        if not self.is_opened():
+        if not self.is_opened() and not GO.puzzle.finished:
             if self.is_questioned():
                 self.questioned = False
                 self.label_art = None
             elif self.is_flagged():
                 self.questioned = True
                 self.flagged = False
+                GO.bombs.set(int(GO.bombs.get()) + 1)
                 self.label_art = constants.S_QUESTION
             else:
                 self.flagged = True
+                GO.bombs.set(int(GO.bombs.get()) - 1)
                 self.label_art = constants.S_FLAG
             
     def is_mine(self):
@@ -401,20 +441,24 @@ def draw_game():
     pygame.display.flip()
 
 def lose_game():
-    print("YOU LOSE!")
+    print("You Lose!")
     GO.puzzle.chain_reaction()
     GO.lost = False
 
 def win_game():
-    print("YOU WIN!")
-    GO.won = False
+##    GO.puzzle.finish_time = time.time()
+    print("You win!")
+    print("{}s".format(GO.current_time))
     
 def update_game():
-    if GO.lost:
+    if GO.lost and not GO.puzzle.finished:
         lose_game()
-    GO.puzzle.win_check()
-    if GO.won:
+        GO.puzzle.finished = True
+    elif GO.won and not GO.puzzle.finished:
         win_game()
+        GO.puzzle.finished = True
+    else:
+        GO.puzzle.win_check()
     GO.update()
     GO.screens[GO.active_screen].update()
 
@@ -451,7 +495,7 @@ def game_main_loop():
                 if event.button == 1:
                     LMB_down = True
                     down_x,down_y = event.pos
-                elif event.button == 2:
+                elif event.button == 3:
                     RMB_down = True
                     down_x,down_y = event.pos
             if event.type == pygame.MOUSEBUTTONUP:
@@ -483,6 +527,9 @@ def game_main_loop():
         if R_click:
             GO.screens[GO.active_screen].is_clicked(click_x,click_y,"RIGHT")
             R_click = False
+        if Simul_click:
+            GO.screens[GO.active_screen].is_clicked(click_x,click_y,"BOTH")
+            Simul_click = False
                 
 
         update_game()
@@ -516,7 +563,10 @@ def initialize_game():
     GO.add_screen(options_screen)
     GO.add_screen(main_screen)
 
-    GO.get_puzzle(main_screen)
+    GO.time = stringVar()
+    GO.bombs = stringVar()
+    
+    GO.get_puzzle()
 
     # (self,art,pressed_art,label_art)
     new_button = button(64,32,
@@ -556,8 +606,14 @@ def initialize_game():
                          constants.S_LARGE_BUTTON_PRESSED,
                          constants.S_BACK_BUTTON_LABEL,
                          action = intro_screen.make_active)
+    new_button_small = button(16,16,
+                        constants.S_SITE,
+                        constants.S_SITE_PRESSED,
+                        constants.S_NEW,
+                        action = GO.get_puzzle)
     
     back_button.place(0,0,main_screen)
+    new_button_small.place(constants.GAME_WIDTH/2,20,main_screen)
     back_button2.place(0,0,high_score_screen)
     back_button3.place(0,0,options_screen)
 
@@ -590,15 +646,21 @@ def initialize_game():
     expert_button.place(40,80,options_screen)
     custom_button.place(40,100,options_screen)
     
-    beginner_label = Label("Beginner")
-    intermediate_label = Label("Intermediate")
-    expert_label = Label("Expert")
-    custom_label = Label("Custom")
+    beginner_label = Label(stringVar("Beginner"))
+    intermediate_label = Label(stringVar("Intermediate"))
+    expert_label = Label(stringVar("Expert"))
+    custom_label = Label(stringVar("Custom"))
 
     beginner_label.place(60,40,options_screen)
     intermediate_label.place(60,60,options_screen)
     expert_label.place(60,80,options_screen)
-    custom_label.place(60,100,options_screen) 
+    custom_label.place(60,100,options_screen)
+
+    time_label = Label(GO.time)
+    bomb_label = Label(GO.bombs)
+    time_label.place(200,32,main_screen)
+    bomb_label.place(0,32,main_screen)
+    
     
     return(GO)
 
