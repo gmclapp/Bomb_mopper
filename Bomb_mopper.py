@@ -9,6 +9,9 @@ class game_object:
         self.screens = {}
         self.won = False
         self.lost = False
+        self.wid = 6
+        self.hei = 6
+        self.mines = 6
         
     def add_screen(self,new_screen):
         key = new_screen.name
@@ -17,19 +20,22 @@ class game_object:
         self.screens[key] = val
 
     def get_puzzle(self,screen):
-        self.puzzle = Puzzle()
+        self.puzzle = Puzzle(self.wid,self.hei,self.mines)
         self.puzzle.place(0,0,screen)
 
 class Puzzle:
-    def __init__(self):
-        self.grid = [0,0,0,0,0,0,
-                     0,1,0,0,0,1,
-                     0,1,0,0,0,0,
-                     1,0,0,0,0,0,
-                     1,1,1,0,0,1,
-                     0,0,0,0,1,0]
-        self.width = 6
-        self.height = 6
+    def __init__(self,wid,hei,mines):
+        self.grid = []
+        for i,item in enumerate(range(wid*hei)):
+            if i < mines:
+                self.grid.append(1)
+            else:
+                self.grid.append(0)
+        random.shuffle(self.grid)
+                
+        self.width = wid
+        self.height = hei
+        self.mines = mines
         self.buttons = []
 
     def place(self,x,y,screen):
