@@ -141,7 +141,7 @@ class button:
             self.pressed = False
 
 class Radiobutton(button):
-    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,var):
+    def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None,var=None):
         super().__init__(wid,hei,art,pressed_art,label_art,action=self.toggle_var,RMB_action=None)
         self.var = var
 
