@@ -16,6 +16,9 @@ S_BACK_BUTTON_LABEL = pygame.image.load("art/Back.png")
 S_HIGH_BUTTON_LABEL = pygame.image.load("art/High Score.png")
 S_OPTION_BUTTON_LABEL = pygame.image.load("art/Options.png")
 
+S_RADIO = pygame.image.load("art/Radio button.png")
+S_RADIO_SELECTED = pygame.image.load("art/Radio button selected.png")
+
 S_SITE = pygame.image.load("art/Button.png")
 S_SITE_PRESSED = pygame.image.load("art/Button pressed.png")
 S_FLAG = pygame.image.load("art/Flag.png")
