@@ -4,6 +4,7 @@ import constants
 import os
 import time
 import datetime as dt
+import json
 
 class game_object:
     def __init__(self):
@@ -15,15 +16,26 @@ class game_object:
         self.hei = 6
         self.mines = 6
         self.game_mode = Var()
+        
+        self.time = stringVar()
+        self.bombs = stringVar()
+    
         self.puzzle = None
-        self.stats = {'Beginner': [],
-                      'Intermediate': [],
-                      'Expert':[]}
+        self.load_stats()
 
     def load_stats(self):
-        pass
+        try:
+            with open('stats.txt','r') as f:
+                self.stats = json.load(f)
+        except FileNotFoundError:
+            self.stats = {'Beginner': [],
+                          'Intermediate': [],
+                          'Expert':[]}
+            self.save_stats()
+            
     def save_stats(self):
-        pass
+        with open('stats.txt','w') as f:
+            f.write(json.dumps(self.stats,indent=4))
     
     def add_screen(self,new_screen):
         key = new_screen.name
@@ -429,7 +441,18 @@ class screen:
     def make_active(self):
         GO.change_active_screen(self.name)
 ##        GO.active_screen = self.name
-    
+
+def parse_date(date):
+    year,month,day = [int(x) for x in date.split('-')]
+    d = dt.date(year,month,day)
+    return(d)
+
+def unpack_date(date):
+    year=date.year
+    month=date.month
+    day=date.day
+    return(year,month,day)
+
 def quit_nicely():
     pygame.display.quit()
     pygame.quit()
@@ -448,7 +471,17 @@ def lose_game():
 def win_game():
 ##    GO.puzzle.finish_time = time.time()
     print("You win!")
-    print("{}s".format(GO.current_time))
+    win_time = GO.current_time
+    win_date = unpack_date(dt.date.today())
+    print("{} - {}s".format(win_date,win_time))
+    modes = {0:'Beginner',
+             1:'Intermediate',
+             2:'Expert',
+             3:'Custom'}
+    
+    GO.stats[modes[GO.game_mode.get()]].append({"Date":win_date,
+                                                  "Score":win_time})
+    GO.save_stats()
     
 def update_game():
     if GO.lost and not GO.puzzle.finished:
@@ -562,9 +595,6 @@ def initialize_game():
     GO.add_screen(high_score_screen)
     GO.add_screen(options_screen)
     GO.add_screen(main_screen)
-
-    GO.time = stringVar()
-    GO.bombs = stringVar()
     
     GO.get_puzzle()
 
