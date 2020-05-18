@@ -694,11 +694,44 @@ def initialize_game():
     beginner_scores_label = Label(stringVar("Beginner"))
     intermediate_scores_label = Label(stringVar("Intermediate"))
     expert_scores_label = Label(stringVar("Expert"))
+
+    beginner_anchor = 32
+    intermediate_anchor = 300
+    expert_anchor = 600
+    beginner_scores_label.place(0,beginner_anchor,high_score_screen)
+    intermediate_scores_label.place(0,intermediate_anchor,high_score_screen)
+    expert_scores_label.place(0,expert_anchor,high_score_screen)
     
     GO.stats["Beginner"].sort(key=lambda x: x["Score"],reverse=False)
     GO.stats["Intermediate"].sort(key=lambda x: x["Score"],reverse=False)
     GO.stats["Expert"].sort(key=lambda x: x["Score"],reverse=False)
-        
+
+    for i in range(20):
+        try:
+            new_label_str = '{} --- {:4.2f}'.format(GO.stats["Beginner"][i]["Date"],
+                                                    GO.stats["Beginner"][i]["Score"])
+            new_label = Label(stringVar(new_label_str))
+            new_label.place(0,beginner_anchor + 12*(i+1),high_score_screen)
+        except IndexError:
+            break
+
+    for i in range(20):
+        try:
+            new_label_str = '{} --- {:4.2f}'.format(GO.stats["Intermediate"][i]["Date"],
+                                                    GO.stats["Intermediate"][i]["Score"])
+            new_label = Label(stringVar(new_label_str))
+            new_label.place(0,intermediate_anchor + 12*(i+1),high_score_screen)
+        except IndexError:
+            break
+
+    for i in range(20):
+        try:
+            new_label_str = '{} --- {:4.2f}'.format(GO.stats["Expert"][i]["Date"],
+                                                    GO.stats["Expert"][i]["Score"])
+            new_label = Label(stringVar(new_label_str))
+            new_label.place(0,expert_anchor + 12*(i+1),high_score_screen)
+        except IndexError:
+            break
     
     
     return(GO)
