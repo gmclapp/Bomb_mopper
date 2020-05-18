@@ -690,6 +690,15 @@ def initialize_game():
     bomb_label = Label(GO.bombs)
     time_label.place(200,32,main_screen)
     bomb_label.place(0,32,main_screen)
+
+    beginner_scores_label = Label(stringVar("Beginner"))
+    intermediate_scores_label = Label(stringVar("Intermediate"))
+    expert_scores_label = Label(stringVar("Expert"))
+    
+    GO.stats["Beginner"].sort(key=lambda x: x["Score"],reverse=False)
+    GO.stats["Intermediate"].sort(key=lambda x: x["Score"],reverse=False)
+    GO.stats["Expert"].sort(key=lambda x: x["Score"],reverse=False)
+        
     
     
     return(GO)
