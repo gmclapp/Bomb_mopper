@@ -65,32 +65,32 @@ class game_object:
         self.stats["Intermediate"].sort(key=lambda x: x["Score"],reverse=False)
         self.stats["Expert"].sort(key=lambda x: x["Score"],reverse=False)
 
-        for i in range(20):
+        for i in range(15):
             try:
                 new_label_str = '{} --- {:4.2f}'.format(self.stats["Beginner"][i]["Date"],
                                                         self.stats["Beginner"][i]["Score"])
                 new_label = Label(stringVar(new_label_str))
-                new_label.place(0,beginner_anchor + 12*(i+1),self.screens['high'])
+                new_label.place(0,beginner_anchor + 16*(i+1),self.screens['high'])
                 self.score_labels.append(new_label)
             except IndexError:
                 break
 
-        for i in range(20):
+        for i in range(15):
             try:
                 new_label_str = '{} --- {:4.2f}'.format(self.stats["Intermediate"][i]["Date"],
                                                         self.stats["Intermediate"][i]["Score"])
                 new_label = Label(stringVar(new_label_str))
-                new_label.place(0,intermediate_anchor + 12*(i+1),self.screens['high'])
+                new_label.place(0,intermediate_anchor + 16*(i+1),self.screens['high'])
                 self.score_labels.append(new_label)
             except IndexError:
                 break
 
-        for i in range(20):
+        for i in range(15):
             try:
                 new_label_str = '{} --- {:4.2f}'.format(self.stats["Expert"][i]["Date"],
                                                         self.stats["Expert"][i]["Score"])
                 new_label = Label(stringVar(new_label_str))
-                new_label.place(0,expert_anchor + 12*(i+1),self.screens['high'])
+                new_label.place(0,expert_anchor + 16*(i+1),self.screens['high'])
                 self.score_labels.append(new_label)
             except IndexError:
                 break
@@ -304,11 +304,11 @@ class Label(button):
     def __init__(self,text):
         super().__init__(0,0,None,None,None,action=None,RMB_action=None)
         self.text = text
-        self.font = pygame.font.Font(None,16)
+        self.font = pygame.font.SysFont("Arial",16)
         self.txt_surface = self.font.render(self.text.get(),True,(0,0,0),16)
 
     def draw(self):
-        self.font = pygame.font.Font(None,16)
+        self.font = pygame.font.SysFont("Arial",16)
         self.txt_surface = self.font.render(self.text.get(),True,(0,0,0),16)
         self.screen.surf.blit(self.txt_surface,(self.x,self.y))
         

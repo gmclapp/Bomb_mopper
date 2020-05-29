@@ -1,0 +1,40 @@
+import cx_Freeze
+
+executables = [cx_Freeze.Executable("Bomb_mopper.py")]
+files_to_include = ["art/Bomb.png",
+                    "art/Large button.png",
+                    "art/Large button pressed.png",
+                    "art/New Game.png",
+                    "art/Back.png",
+                    "art/High score.png",
+                    "art/Options.png",
+                    "art/Radio button.png",
+                    "art/Radio button selected.png",
+                    "art/Button.png",
+                    "art/Button pressed.png",
+                    "art/Flag.png",
+                    "art/Empty.png",
+                    "art/Question mark.png",
+                    "art/New Game small.png",
+                    "art/Won game small.png",
+                    "art/One.png",
+                    "art/Two.png",
+                    "art/Three.png",
+                    "art/Four.png",
+                    "art/Five.png",
+                    "art/Six.png",
+                    "art/Seven.png",
+                    "art/Eight.png",
+                    "art/Nine.png",
+                    "art/Zero.png"]
+cx_Freeze.setup(
+    name = "Bomb mopper",
+    options = {"build_exe":{"packages":["pygame",
+                                        "random",
+                                        "constants",
+                                        "os","time",
+                                        "datetime",
+                                        "json"],
+                            "include_files":files_to_include}},
+    executables=executables)
+    
