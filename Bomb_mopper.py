@@ -99,11 +99,8 @@ class game_object:
         if self.active_screen != screen:
             self.active_screen = screen
             if screen == 'main':
-                print("Getting a new {}x{} puzzle with {} mines.".format(self.wid,
-                                                                         self.hei,
-                                                                         self.mines))
                 self.get_puzzle()
-                print(self.puzzle)
+
             else:
                 pass
             
@@ -146,18 +143,7 @@ class Puzzle:
                 self.grid.append(1)
             else:
                 self.grid.append(0)
-        random.shuffle(self.grid)
-
-##        self.grid = [0,0,0,0,0,0,0,1,0,
-##                     1,1,0,0,1,0,0,0,0,
-##                     0,0,0,0,0,0,1,0,0,
-##                     0,1,0,0,0,0,0,0,0,
-##                     0,0,0,0,0,0,0,0,0,
-##                     1,0,0,0,0,0,0,0,0,
-##                     0,1,0,0,0,0,0,0,1,
-##                     0,0,0,0,0,0,0,0,0,
-##                     0,1,0,0,0,1,1,0,0]
-                     
+        random.shuffle(self.grid)                    
         
         for i,site in enumerate(self.grid):
             if site == 1:
@@ -404,7 +390,6 @@ class Site(button):
             if self.is_mine():
                 self.label_art = constants.S_BOMB
                 GO.lost = True
-                print("{},{} is a mine!".format(self.grid_x,self.grid_y))
             else:
                 if self.neighbor_mines == 0:
                     self.open_neighbors()
@@ -483,7 +468,6 @@ class screen:
 
     def make_active(self):
         GO.change_active_screen(self.name)
-##        GO.active_screen = self.name
 
 def parse_date(date):
     year,month,day = [int(x) for x in date.split('-')]
@@ -588,7 +572,6 @@ def game_main_loop():
                         Simul_click = True
                     else:
                         R_click = True
-                        print("Right click")
                     RMB_down = False
 
                 else:
