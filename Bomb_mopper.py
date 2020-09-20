@@ -676,6 +676,7 @@ def initialize_game():
     back_button2.place(10,10,high_score_screen)
     back_button3.place(10,10,options_screen)
 
+    # Build game mode radio buttons
     beginner_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
                                   constants.S_RADIO,
                                   constants.S_RADIO,
@@ -693,6 +694,7 @@ def initialize_game():
                                   constants.S_RADIO,
                                   None)
 
+    
     game_mode_manager = RadioButtonManager(GO.game_mode)
     game_mode_manager.add_button(beginner_button)
     game_mode_manager.add_button(intermediate_button)
@@ -715,11 +717,55 @@ def initialize_game():
     expert_label.place(72,168,options_screen)
     custom_label.place(72,208,options_screen)
 
+    # Build high score screen radio buttons
+    beg_scores_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
+                                    constants.S_RADIO,
+                                    constants.S_RADIO,
+                                    None)
+    int_scores_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
+                                    constants.S_RADIO,
+                                    constants.S_RADIO,
+                                    None)
+    expert_scores_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
+                                    constants.S_RADIO,
+                                    constants.S_RADIO,
+                                    None)
+    custom_scores_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
+                                    constants.S_RADIO,
+                                    constants.S_RADIO,
+                                    None)
+
+    beg_scores_button.place(142,10,high_score_screen)
+    int_scores_button.place(142,41,high_score_screen)
+    expert_scores_button.place(276,10,high_score_screen)
+    custom_scores_button.place(276,41,high_score_screen)
+    
+    beg_scores_label = Label(stringVar("Beginner"))
+    int_scores_label = Label(stringVar("Intermediate"))
+    expert_scores_label = Label(stringVar("Expert"))
+    custom_scores_label = Label(stringVar("Custom"))
+
+    beg_scores_label.place(174,18,high_score_screen)
+    int_scores_label.place(174,49,high_score_screen)
+    expert_scores_label.place(308,18,high_score_screen)
+    custom_scores_label.place(308,49,high_score_screen)
+    
+    high_mode_manager = RadioButtonManager(GO.highscore_mode)
+    high_mode_manager.add_button(beg_scores_button)
+    high_mode_manager.add_button(int_scores_button)
+    high_mode_manager.add_button(expert_scores_button)
+    high_mode_manager.add_button(custom_scores_button)
+    beg_scores_button.toggle_var()# This button will be selected on start up
+    
+    flag_mode_manager = RadioButtonManager(GO.highscore_flags)
+
+    # Build game screen timers and counters  
     time_label = Label(GO.time)
     bomb_label = Label(GO.bombs)
     time_label.place(200,32,main_screen)
     bomb_label.place(0,32,main_screen)
 
+    # Build highscore tables
     beginner_scores_label = Label(stringVar("Beginner"))
     intermediate_scores_label = Label(stringVar("Intermediate"))
     expert_scores_label = Label(stringVar("Expert"))
