@@ -16,6 +16,8 @@ class game_object:
         self.hei = 6
         self.mines = 6
         self.game_mode = Var()
+        self.highscore_mode = Var()
+        self.highscore_flags = Var()
         
         self.time = stringVar()
         self.bombs = stringVar()
@@ -147,13 +149,13 @@ class Puzzle:
         
         for i,site in enumerate(self.grid):
             if site == 1:
-                new_site = Site(16,16,
+                new_site = Site(constants.SITE_SIZE,constants.SITE_SIZE,
                                 constants.S_SITE,
                                 constants.S_SITE_PRESSED,
                                 None,
                                 mine = True)
             else:
-                new_site = Site(16,16,
+                new_site = Site(32,32,
                                 constants.S_SITE,
                                 constants.S_SITE_PRESSED,
                                 None,
@@ -161,8 +163,8 @@ class Puzzle:
             site_x = i%self.width
             site_y = int(i/self.width)
             new_site.setxy(site_x,site_y)
-            site_art_x = constants.PUZZLE_PAD_X + site_x*16
-            site_art_y = constants.PUZZLE_PAD_Y + site_y*16
+            site_art_x = constants.PUZZLE_PAD_X + site_x*constants.SITE_SIZE
+            site_art_y = constants.PUZZLE_PAD_Y + site_y*constants.SITE_SIZE
             new_site.place(site_art_x,site_art_y,GO.screens['main'])
             self.buttons.append(new_site)
         self.set_numbers()
@@ -648,45 +650,45 @@ def initialize_game():
     options_button.place(576,288,intro_screen)
     high_score_button.place(896,288,intro_screen)
     
-    back_button = button(64,32,
+    back_button = button(128,64,
                          constants.S_LARGE_BUTTON,
                          constants.S_LARGE_BUTTON_PRESSED,
                          constants.S_BACK_BUTTON_LABEL,
                          action = intro_screen.make_active)
-    back_button2 = button(64,32,
+    back_button2 = button(128,64,
                          constants.S_LARGE_BUTTON,
                          constants.S_LARGE_BUTTON_PRESSED,
                          constants.S_BACK_BUTTON_LABEL,
                          action = intro_screen.make_active)
-    back_button3 = button(64,32,
+    back_button3 = button(128,64,
                          constants.S_LARGE_BUTTON,
                          constants.S_LARGE_BUTTON_PRESSED,
                          constants.S_BACK_BUTTON_LABEL,
                          action = intro_screen.make_active)
-    new_button_small = button(16,16,
+    new_button_small = button(32,32,
                         constants.S_SITE,
                         constants.S_SITE_PRESSED,
                         constants.S_NEW,
                         action = GO.get_puzzle)
     
-    back_button.place(0,0,main_screen)
+    back_button.place(10,10,main_screen)
     new_button_small.place(constants.GAME_WIDTH/2,20,main_screen)
-    back_button2.place(0,0,high_score_screen)
-    back_button3.place(0,0,options_screen)
+    back_button2.place(10,10,high_score_screen)
+    back_button3.place(10,10,options_screen)
 
-    beginner_button = Radiobutton(16,16,
+    beginner_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
                                   constants.S_RADIO,
                                   constants.S_RADIO,
                                   None)
-    intermediate_button = Radiobutton(16,16,
+    intermediate_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
                                   constants.S_RADIO,
                                   constants.S_RADIO,
                                   None)
-    expert_button = Radiobutton(16,16,
+    expert_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
                                   constants.S_RADIO,
                                   constants.S_RADIO,
                                   None)
-    custom_button = Radiobutton(16,16,
+    custom_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
                                   constants.S_RADIO,
                                   constants.S_RADIO,
                                   None)
@@ -698,20 +700,20 @@ def initialize_game():
     game_mode_manager.add_button(custom_button)
     beginner_button.toggle_var() # On start up, this button will be selected.
 
-    beginner_button.place(40,40,options_screen)
-    intermediate_button.place(40,60,options_screen)
-    expert_button.place(40,80,options_screen)
-    custom_button.place(40,100,options_screen)
+    beginner_button.place(40,80,options_screen)
+    intermediate_button.place(40,120,options_screen)
+    expert_button.place(40,160,options_screen)
+    custom_button.place(40,200,options_screen)
     
     beginner_label = Label(stringVar("Beginner"))
     intermediate_label = Label(stringVar("Intermediate"))
     expert_label = Label(stringVar("Expert"))
     custom_label = Label(stringVar("Custom"))
 
-    beginner_label.place(60,40,options_screen)
-    intermediate_label.place(60,60,options_screen)
-    expert_label.place(60,80,options_screen)
-    custom_label.place(60,100,options_screen)
+    beginner_label.place(72,88,options_screen)
+    intermediate_label.place(72,128,options_screen)
+    expert_label.place(72,168,options_screen)
+    custom_label.place(72,208,options_screen)
 
     time_label = Label(GO.time)
     bomb_label = Label(GO.bombs)
