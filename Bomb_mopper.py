@@ -56,9 +56,13 @@ class game_object:
         self.won = False
 
     def refresh_scores(self):
-        beginner_anchor = 32
-        intermediate_anchor = 300
-        expert_anchor = 600
+        scores_anchor = 114
+        difficulty_dict = {0:"Beginner",
+                           1:"Intermediate",
+                           2:"Expert",
+                           3:"Custom"}
+        difficulty = difficulty_dict[self.highscore_mode.get()]
+        
         for i in self.score_labels:
             self.screens['high'].remove_button(i)
             
@@ -67,32 +71,12 @@ class game_object:
         self.stats["Intermediate"].sort(key=lambda x: x["Score"],reverse=False)
         self.stats["Expert"].sort(key=lambda x: x["Score"],reverse=False)
 
-        for i in range(15):
+        for i in range(20):
             try:
-                new_label_str = '{} --- {:4.2f}'.format(self.stats["Beginner"][i]["Date"],
-                                                        self.stats["Beginner"][i]["Score"])
+                new_label_str = '{} --- {:4.2f}'.format(self.stats[difficulty][i]["Date"],
+                                                        self.stats[difficulty][i]["Score"])
                 new_label = Label(stringVar(new_label_str))
-                new_label.place(0,beginner_anchor + 16*(i+1),self.screens['high'])
-                self.score_labels.append(new_label)
-            except IndexError:
-                break
-
-        for i in range(15):
-            try:
-                new_label_str = '{} --- {:4.2f}'.format(self.stats["Intermediate"][i]["Date"],
-                                                        self.stats["Intermediate"][i]["Score"])
-                new_label = Label(stringVar(new_label_str))
-                new_label.place(0,intermediate_anchor + 16*(i+1),self.screens['high'])
-                self.score_labels.append(new_label)
-            except IndexError:
-                break
-
-        for i in range(15):
-            try:
-                new_label_str = '{} --- {:4.2f}'.format(self.stats["Expert"][i]["Date"],
-                                                        self.stats["Expert"][i]["Score"])
-                new_label = Label(stringVar(new_label_str))
-                new_label.place(0,expert_anchor + 16*(i+1),self.screens['high'])
+                new_label.place(10,scores_anchor+16*(i+1),self.screens['high'])
                 self.score_labels.append(new_label)
             except IndexError:
                 break
@@ -126,6 +110,9 @@ class game_object:
         if not self.puzzle.finished:
             GO.current_time = time.time() - self.puzzle.start_time
             self.time.set("{:4.2f}".format(GO.current_time))
+
+        if self.active_screen == 'high':
+            self.refresh_scores()
 
 class Puzzle:
     def __init__(self,wid,hei,mines,GO):
@@ -440,8 +427,8 @@ class screen:
         self.name = name
         self.surf = pygame.Surface((wid,hei))
 
-    def set_BG(self):
-        self.BG = constants.DEFAULT_BG
+    def set_BG(self,background):
+        self.BG = background
 
     def is_pressed(self,x,y,MB):
         '''processes x,y coordinates of a mouse button press and the mouse
@@ -616,10 +603,10 @@ def initialize_game():
     options_screen = screen("options",constants.GAME_WIDTH,constants.GAME_HEIGHT)
     main_screen = screen("main",constants.GAME_WIDTH,constants.GAME_HEIGHT)
 
-    intro_screen.set_BG()
-    high_score_screen.set_BG()
-    options_screen.set_BG()
-    main_screen.set_BG()
+    intro_screen.set_BG(constants.DEFAULT_BG)
+    high_score_screen.set_BG(constants.HIGHSCORE_BG)
+    options_screen.set_BG(constants.DEFAULT_BG)
+    main_screen.set_BG(constants.DEFAULT_BG)
 
     GO.add_screen(intro_screen)
     GO.add_screen(high_score_screen)
@@ -773,9 +760,9 @@ def initialize_game():
     beginner_anchor = 32
     intermediate_anchor = 300
     expert_anchor = 600
-    beginner_scores_label.place(0,beginner_anchor,high_score_screen)
-    intermediate_scores_label.place(0,intermediate_anchor,high_score_screen)
-    expert_scores_label.place(0,expert_anchor,high_score_screen)
+##    beginner_scores_label.place(0,beginner_anchor,high_score_screen)
+##    intermediate_scores_label.place(0,intermediate_anchor,high_score_screen)
+##    expert_scores_label.place(0,expert_anchor,high_score_screen)
     
     GO.refresh_scores()
     

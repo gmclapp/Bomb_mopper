@@ -7,6 +7,7 @@ PUZZLE_PAD_Y = 80
 
 ##DEFAULT_BG = (200,0,0)
 DEFAULT_BG = pygame.image.load("art/Screen background.png")
+HIGHSCORE_BG = pygame.image.load("art/High Score background.png")
 
 S_BOMB = pygame.image.load("art/Bomb32.png")
 SITE_SIZE = 32
