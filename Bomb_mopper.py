@@ -438,8 +438,8 @@ class screen:
         self.name = name
         self.surf = pygame.Surface((wid,hei))
 
-    def set_BG(self,color):
-        self.BG = color
+    def set_BG(self):
+        self.BG = constants.DEFAULT_BG
 
     def is_pressed(self,x,y,MB):
         '''processes x,y coordinates of a mouse button press and the mouse
@@ -456,7 +456,8 @@ class screen:
             b.update()
 
     def draw(self):
-        self.surf.fill(self.BG)
+##        self.surf.fill(self.BG)
+        self.surf.blit(self.BG,(0,0))
         for b in self.buttons:
             b.draw()
 
@@ -613,10 +614,10 @@ def initialize_game():
     options_screen = screen("options",constants.GAME_WIDTH,constants.GAME_HEIGHT)
     main_screen = screen("main",constants.GAME_WIDTH,constants.GAME_HEIGHT)
 
-    intro_screen.set_BG((50,50,50))
-    high_score_screen.set_BG((50,50,50))
-    options_screen.set_BG((50,50,50))
-    main_screen.set_BG((50,50,50))
+    intro_screen.set_BG()
+    high_score_screen.set_BG()
+    options_screen.set_BG()
+    main_screen.set_BG()
 
     GO.add_screen(intro_screen)
     GO.add_screen(high_score_screen)
@@ -625,28 +626,27 @@ def initialize_game():
     
     GO.get_puzzle()
 
-    # (self,art,pressed_art,label_art)
-    new_button = button(64,32,
+    new_button = button(128,64,
                         constants.S_LARGE_BUTTON,
                         constants.S_LARGE_BUTTON_PRESSED,
                         constants.S_NEW_BUTTON_LABEL,
                         main_screen.make_active)
     
-    options_button = button(64,32,
+    options_button = button(128,64,
                             constants.S_LARGE_BUTTON,
                             constants.S_LARGE_BUTTON_PRESSED,
                             constants.S_OPTION_BUTTON_LABEL,
                             options_screen.make_active)
     
-    high_score_button = button(64,32,
+    high_score_button = button(128,64,
                                constants.S_LARGE_BUTTON,
                                constants.S_LARGE_BUTTON_PRESSED,
                                constants.S_HIGH_BUTTON_LABEL,
                                high_score_screen.make_active)
 
-    new_button.place(150,50,intro_screen)
-    options_button.place(215,50,intro_screen)
-    high_score_button.place(280,50,intro_screen)
+    new_button.place(256,288,intro_screen)
+    options_button.place(576,288,intro_screen)
+    high_score_button.place(896,288,intro_screen)
     
     back_button = button(64,32,
                          constants.S_LARGE_BUTTON,
