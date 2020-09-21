@@ -30,6 +30,13 @@ class game_object:
         try:
             with open('stats.txt','r') as f:
                 self.stats = json.load(f)
+                for i in self.stats["Beginner"]:
+                    i["Player"]="Glenn"
+                for i in self.stats["Intermediate"]:
+                    i["Player"]="Glenn"
+                for i in self.stats["Expert"]:
+                    i["Player"]="Glenn"
+                    
         except FileNotFoundError:
             self.stats = {'Beginner': [],
                           'Intermediate': [],
@@ -56,7 +63,9 @@ class game_object:
         self.won = False
 
     def refresh_scores(self):
-        scores_anchor = 114
+        player_name_x_anchor = 10
+        score_x_anchor = 200
+        y_anchor = 114
         difficulty_dict = {0:"Beginner",
                            1:"Intermediate",
                            2:"Expert",
@@ -76,7 +85,7 @@ class game_object:
                 new_label_str = '{} --- {:4.2f}'.format(self.stats[difficulty][i]["Date"],
                                                         self.stats[difficulty][i]["Score"])
                 new_label = Label(stringVar(new_label_str))
-                new_label.place(10,scores_anchor+16*(i+1),self.screens['high'])
+                new_label.place(player_name_x_anchor,y_anchor+16*(i+1),self.screens['high'])
                 self.score_labels.append(new_label)
             except IndexError:
                 break
