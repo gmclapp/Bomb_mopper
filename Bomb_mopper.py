@@ -335,6 +335,7 @@ class RadioButtonManager:
 class Radiobutton(button):
     def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None):
         super().__init__(wid,hei,art,pressed_art,label_art,action=self.toggle_var,RMB_action=None)
+        self.label = None
         
     def toggle_var(self):
         '''Tells the parent manager that this button has been pushed so it can reassign update the
@@ -346,6 +347,16 @@ class Radiobutton(button):
 
     def setIndex(self,index):
         self.index = index
+
+    def set_label(self,label_txt):
+        self.label = Label(stringVar(label_txt))
+        self.label.place(self.x + 32,self.y+8,self.screen)
+
+    def draw(self):
+        super().draw()
+        if self.label:
+            self.label.draw()
+        
 
 class Var:
     def __init__(self):
@@ -702,16 +713,11 @@ def initialize_game():
     intermediate_button.place(40,120,options_screen)
     expert_button.place(40,160,options_screen)
     custom_button.place(40,200,options_screen)
-    
-    beginner_label = Label(stringVar("Beginner"))
-    intermediate_label = Label(stringVar("Intermediate"))
-    expert_label = Label(stringVar("Expert"))
-    custom_label = Label(stringVar("Custom"))
 
-    beginner_label.place(72,88,options_screen)
-    intermediate_label.place(72,128,options_screen)
-    expert_label.place(72,168,options_screen)
-    custom_label.place(72,208,options_screen)
+    beginner_button.set_label("Beginner")
+    intermediate_button.set_label("Intermediate")
+    expert_button.set_label("Expert")
+    custom_button.set_label("Custom")
 
     # Build high score screen radio buttons
     beg_scores_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
@@ -735,16 +741,11 @@ def initialize_game():
     int_scores_button.place(142,41,high_score_screen)
     expert_scores_button.place(276,10,high_score_screen)
     custom_scores_button.place(276,41,high_score_screen)
-    
-    beg_scores_label = Label(stringVar("Beginner"))
-    int_scores_label = Label(stringVar("Intermediate"))
-    expert_scores_label = Label(stringVar("Expert"))
-    custom_scores_label = Label(stringVar("Custom"))
 
-    beg_scores_label.place(174,18,high_score_screen)
-    int_scores_label.place(174,49,high_score_screen)
-    expert_scores_label.place(308,18,high_score_screen)
-    custom_scores_label.place(308,49,high_score_screen)
+    beg_scores_button.set_label("Beginner")
+    int_scores_button.set_label("Intermediate")
+    expert_scores_button.set_label("Expert")
+    custom_scores_button.set_label("Custom")
     
     high_mode_manager = RadioButtonManager(GO.highscore_mode)
     high_mode_manager.add_button(beg_scores_button)
@@ -769,9 +770,6 @@ def initialize_game():
     beginner_anchor = 32
     intermediate_anchor = 300
     expert_anchor = 600
-##    beginner_scores_label.place(0,beginner_anchor,high_score_screen)
-##    intermediate_scores_label.place(0,intermediate_anchor,high_score_screen)
-##    expert_scores_label.place(0,expert_anchor,high_score_screen)
     
     GO.refresh_scores()
     
