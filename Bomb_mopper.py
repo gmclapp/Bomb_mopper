@@ -64,8 +64,11 @@ class game_object:
 
     def refresh_scores(self):
         player_name_x_anchor = 10
-        score_x_anchor = 200
+        score_x_anchor = 507
+        date_x_anchor = 900
+        
         y_anchor = 114
+        
         difficulty_dict = {0:"Beginner",
                            1:"Intermediate",
                            2:"Expert",
@@ -82,11 +85,21 @@ class game_object:
 
         for i in range(20):
             try:
-                new_label_str = '{} --- {:4.2f}'.format(self.stats[difficulty][i]["Date"],
-                                                        self.stats[difficulty][i]["Score"])
-                new_label = Label(stringVar(new_label_str))
-                new_label.place(player_name_x_anchor,y_anchor+16*(i+1),self.screens['high'])
-                self.score_labels.append(new_label)
+                player_label_str = '{}'.format(self.stats[difficulty][i]["Player"])
+                score_label_str = '{:4.2f}'.format(self.stats[difficulty][i]["Score"])
+                date_label_str = '{}'.format(self.stats[difficulty][i]["Date"])
+
+                player_label = Label(stringVar(player_label_str))
+                score_label = Label(stringVar(score_label_str))
+                date_label = Label(stringVar(date_label_str))
+
+                player_label.place(player_name_x_anchor,y_anchor+16*(i+1),self.screens['high'])
+                score_label.place(score_x_anchor,y_anchor+16*(i+1),self.screens['high'])
+                date_label.place(date_x_anchor,y_anchor+16*(i+1),self.screens['high'])
+
+                self.score_labels.append(player_label)
+                self.score_labels.append(score_label)
+                self.score_labels.append(date_label)
             except IndexError:
                 break
 
@@ -791,8 +804,8 @@ def initialize_game():
     # Build game screen timers and counters  
     time_label = Label(GO.time)
     bomb_label = Label(GO.bombs)
-    time_label.place(200,32,main_screen)
-    bomb_label.place(0,32,main_screen)
+    time_label.place(300,32,main_screen)
+    bomb_label.place(50,32,main_screen)
 
     # Build highscore tables
     beginner_scores_label = Label(stringVar("Beginner"))
