@@ -85,6 +85,7 @@ class game_object:
 
         for i in range(20):
             try:
+                y_anchor_temp = y_anchor+16*(i+1)
                 player_label_str = '{}'.format(self.stats[difficulty][i]["Player"])
                 score_label_str = '{:4.2f}'.format(self.stats[difficulty][i]["Score"])
                 date_label_str = '{}'.format(self.stats[difficulty][i]["Date"])
@@ -93,9 +94,9 @@ class game_object:
                 score_label = Label(stringVar(score_label_str))
                 date_label = Label(stringVar(date_label_str))
 
-                player_label.place(player_name_x_anchor,y_anchor+16*(i+1),self.screens['high'])
-                score_label.place(score_x_anchor,y_anchor+16*(i+1),self.screens['high'])
-                date_label.place(date_x_anchor,y_anchor+16*(i+1),self.screens['high'])
+                player_label.place(player_name_x_anchor,y_anchor_temp,self.screens['high'])
+                score_label.place(score_x_anchor,y_anchor_temp,self.screens['high'])
+                date_label.place(date_x_anchor,y_anchor_temp,self.screens['high'])
 
                 self.score_labels.append(player_label)
                 self.score_labels.append(score_label)
