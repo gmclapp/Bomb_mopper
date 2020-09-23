@@ -22,6 +22,16 @@
             "Date": [
                 2020,
                 9,
+                23
+            ],
+            "Score": 11.648743391036987,
+            "Flags": true,
+            "Player": "Glenn"
+        },
+        {
+            "Date": [
+                2020,
+                9,
                 20
             ],
             "Score": 15.35787844657898,
@@ -105,7 +115,26 @@
                 9,
                 23
             ],
+            "Score": 22.972761154174805,
+            "Flags": true,
+            "Player": "Glenn"
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                23
+            ],
             "Score": 23.67263150215149,
+            "Player": "Glenn"
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                23
+            ],
+            "Score": 23.86809778213501,
             "Player": "Glenn"
         },
         {
@@ -159,7 +188,9 @@
                 9,
                 23
             ],
-            "Score": 23.86809778213501
+            "Score": 27.40221333503723,
+            "Flags": false,
+            "Player": "Glenn McNoflags"
         }
     ],
     "Intermediate": [

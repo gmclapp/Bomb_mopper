@@ -144,6 +144,7 @@ class Puzzle:
         self.start_time = time.time()
         self.finish_time = None
         self.finished = False
+        self.flags = False
         
         for i,item in enumerate(range(self.width*self.height)):
             if i < self.mines:
@@ -447,6 +448,7 @@ class Site(button):
                 self.label_art = constants.S_QUESTION
             else:
                 self.flagged = True
+                GO.puzzle.flags = True
                 GO.bombs.set(int(GO.bombs.get()) - 1)
                 self.label_art = constants.S_FLAG
             
@@ -533,14 +535,18 @@ def win_game():
     print("You win!")
     win_time = GO.current_time
     win_date = unpack_date(dt.date.today())
-    print("{} - {}s".format(win_date,win_time))
+    win_flags = GO.puzzle.flags
+    print("You win! Enter your name!")
+    win_player = input(">>> ")
     modes = {0:'Beginner',
              1:'Intermediate',
              2:'Expert',
              3:'Custom'}
     
     GO.stats[modes[GO.game_mode.get()]].append({"Date":win_date,
-                                                  "Score":win_time})
+                                                "Score":win_time,
+                                                "Flags":win_flags,
+                                                "Player":win_player})
     GO.save_stats()
     GO.refresh_scores()
     
