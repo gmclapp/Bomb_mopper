@@ -97,7 +97,7 @@ class game_object:
         for i in range(20):
             try:
                 y_anchor_temp = y_anchor+16*(i+1)
-                player_label_str = '{}'.format(self.stats[difficulty][i]["Player"])
+                player_label_str = '{:2}. {}'.format(i+1,self.stats[difficulty][i]["Player"])
                 score_label_str = '{:4.2f}'.format(self.stats[difficulty][i]["Score"])
                 date_label_str = '{}'.format(self.stats[difficulty][i]["Date"])
 
