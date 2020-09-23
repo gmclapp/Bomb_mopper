@@ -31,11 +31,22 @@ class game_object:
             with open('stats.txt','r') as f:
                 self.stats = json.load(f)
                 for i in self.stats["Beginner"]:
-                    i["Player"]="Glenn"
+                    if not ("Player" in i):
+                        i["Player"]="Unknown"
+                    if not ("Flags" in i):
+                        i["Flags"]=True
+                        
                 for i in self.stats["Intermediate"]:
-                    i["Player"]="Glenn"
+                    if not ("Player" in i):
+                        i["Player"]="Unknown"
+                    if not ("Flags" in i):
+                        i["Flags"]=True
+                        
                 for i in self.stats["Expert"]:
-                    i["Player"]="Glenn"
+                    if not ("Player" in i):
+                        i["Player"]="Unknown"
+                    if not ("Flags" in i):
+                        i["Flags"]=True
                     
         except FileNotFoundError:
             self.stats = {'Beginner': [],

@@ -7,7 +7,8 @@
                 20
             ],
             "Score": 5.630322217941284,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -16,7 +17,8 @@
                 20
             ],
             "Score": 11.116635799407959,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -35,7 +37,8 @@
                 20
             ],
             "Score": 15.35787844657898,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -44,7 +47,8 @@
                 23
             ],
             "Score": 15.508126020431519,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -53,7 +57,8 @@
                 20
             ],
             "Score": 15.590891599655151,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -62,7 +67,8 @@
                 23
             ],
             "Score": 16.50606608390808,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -71,7 +77,8 @@
                 29
             ],
             "Score": 17.122979402542114,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -80,7 +87,8 @@
                 20
             ],
             "Score": 17.538002967834473,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -89,7 +97,8 @@
                 20
             ],
             "Score": 17.732014179229736,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -98,7 +107,8 @@
                 23
             ],
             "Score": 17.915435552597046,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -107,7 +117,18 @@
                 20
             ],
             "Score": 21.31321907043457,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                23
+            ],
+            "Score": 22.094368934631348,
+            "Flags": false,
+            "Player": "McNoflags strikes again!"
         },
         {
             "Date": [
@@ -126,7 +147,8 @@
                 23
             ],
             "Score": 23.67263150215149,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -135,7 +157,8 @@
                 23
             ],
             "Score": 23.86809778213501,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -144,7 +167,8 @@
                 29
             ],
             "Score": 24.674411296844482,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -153,7 +177,8 @@
                 23
             ],
             "Score": 25.37019181251526,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -162,25 +187,8 @@
                 20
             ],
             "Score": 27.33756375312805,
-            "Player": "Glenn"
-        },
-        {
-            "Date": [
-                2020,
-                9,
-                20
-            ],
-            "Score": 31.360793590545654,
-            "Player": "Glenn"
-        },
-        {
-            "Date": [
-                2020,
-                9,
-                20
-            ],
-            "Score": 31.54180383682251,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -191,6 +199,36 @@
             "Score": 27.40221333503723,
             "Flags": false,
             "Player": "Glenn McNoflags"
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                20
+            ],
+            "Score": 31.360793590545654,
+            "Player": "Glenn",
+            "Flags": true
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                20
+            ],
+            "Score": 31.54180383682251,
+            "Player": "Glenn",
+            "Flags": true
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                23
+            ],
+            "Score": 18.91685175895691,
+            "Flags": true,
+            "Player": "Glenn"
         }
     ],
     "Intermediate": [
@@ -201,7 +239,8 @@
                 20
             ],
             "Score": 69.11595296859741,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -210,7 +249,8 @@
                 20
             ],
             "Score": 89.07509469985962,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -219,7 +259,8 @@
                 23
             ],
             "Score": 92.82304072380066,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         },
         {
             "Date": [
@@ -228,7 +269,8 @@
                 23
             ],
             "Score": 121.6204833984375,
-            "Player": "Glenn"
+            "Player": "Glenn",
+            "Flags": true
         }
     ],
     "Expert": []
