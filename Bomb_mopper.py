@@ -764,7 +764,29 @@ def initialize_game():
     beg_scores_button.toggle_var()# This button will be selected on start up
     high_mode_manager.action_on_change(GO.refresh_scores)
     
+    # Build flags vs. no flags options for high scores
+    flags_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
+                                    constants.S_RADIO,
+                                    constants.S_RADIO,
+                                    None)
+    no_flags_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
+                                    constants.S_RADIO,
+                                    constants.S_RADIO,
+                                    None)
+
+    flags_button.place(500,10,high_score_screen)
+    no_flags_button.place(500,41,high_score_screen)
+
+    flags_button.set_label("Flags")
+    no_flags_button.set_label("No flags")
+    
+
     flag_mode_manager = RadioButtonManager(GO.highscore_flags)
+    flag_mode_manager.add_button(flags_button)
+    flag_mode_manager.add_button(no_flags_button)
+    flags_button.toggle_var()# This button will be selected on start up
+    flag_mode_manager.action_on_change(GO.refresh_scores)
+    
 
     # Build game screen timers and counters  
     time_label = Label(GO.time)
