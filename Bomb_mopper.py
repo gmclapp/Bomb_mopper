@@ -120,8 +120,8 @@ class game_object:
             GO.current_time = time.time() - self.puzzle.start_time
             self.time.set("{:4.2f}".format(GO.current_time))
 
-        if self.active_screen == 'high':
-            self.refresh_scores()
+##        if self.active_screen == 'high':
+##            self.refresh_scores()
 
 class Puzzle:
     def __init__(self,wid,hei,mines,GO):
@@ -314,6 +314,7 @@ class RadioButtonManager:
     def __init__(self,var):
         self.var = var
         self.button_list = []
+        self.action = None
 
     def add_button(self,button):
         button.setParent(self)
@@ -331,6 +332,11 @@ class RadioButtonManager:
             else:
                 b.art = constants.S_RADIO
                 b.pressed_art = constants.S_RADIO
+        if self.action:
+            self.action()
+
+    def action_on_change(self,action=None):
+        self.action = action
 
 class Radiobutton(button):
     def __init__(self,wid,hei,art,pressed_art,label_art,action=None,RMB_action=None):
@@ -753,6 +759,7 @@ def initialize_game():
     high_mode_manager.add_button(expert_scores_button)
     high_mode_manager.add_button(custom_scores_button)
     beg_scores_button.toggle_var()# This button will be selected on start up
+    high_mode_manager.action_on_change(GO.refresh_scores)
     
     flag_mode_manager = RadioButtonManager(GO.highscore_flags)
 
