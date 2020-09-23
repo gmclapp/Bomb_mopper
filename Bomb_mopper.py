@@ -97,9 +97,7 @@ class game_object:
                 self.get_puzzle()
 
             else:
-                pass
-            
-        
+                pass        
 
     def update(self):
         if self.game_mode.get() == 0: # Beginner
@@ -119,9 +117,6 @@ class game_object:
         if not self.puzzle.finished:
             GO.current_time = time.time() - self.puzzle.start_time
             self.time.set("{:4.2f}".format(GO.current_time))
-
-##        if self.active_screen == 'high':
-##            self.refresh_scores()
 
 class Puzzle:
     def __init__(self,wid,hei,mines,GO):
@@ -311,6 +306,9 @@ class Label(button):
         self.screen.surf.blit(self.txt_surface,(self.x,self.y))
         
 class RadioButtonManager:
+    '''Object which controls multiple radio buttons. Pass a Var which is an integer
+    this manager will set to indicate which button out of the list of buttons it is
+    managing is currently active.'''
     def __init__(self,var):
         self.var = var
         self.button_list = []
@@ -336,6 +334,8 @@ class RadioButtonManager:
             self.action()
 
     def action_on_change(self,action=None):
+        '''Pass a function to this function and that function will be excecuted any time
+        The radio button manager switches state from one selection to another.'''
         self.action = action
 
 class Radiobutton(button):
@@ -349,12 +349,15 @@ class Radiobutton(button):
         self.parent.toggle_button(self.index)
 
     def setParent(self,parent):
+        '''Pass the RadioButtonManager which will control this radio button.
+        Only one radio button controlled by a given RadioButtonManager can be active at a time.'''
         self.parent = parent
 
     def setIndex(self,index):
         self.index = index
 
     def set_label(self,label_txt):
+        '''Pass a string which will be displayed next to this radio button.'''
         self.label = Label(stringVar(label_txt))
         self.label.place(self.x + 32,self.y+8,self.screen)
 
