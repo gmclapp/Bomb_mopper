@@ -614,8 +614,6 @@ def win_game():
     win_time = GO.current_time
     win_date = unpack_date(dt.date.today())
     win_flags = GO.puzzle.flags
-    print("You win! Enter your name!")
-    win_player = input(">>> ")
     modes = {0:'Beginner',
              1:'Intermediate',
              2:'Expert',
@@ -668,6 +666,8 @@ def game_main_loop():
                     elif GO.active_screen == "high":
                         GO.active_screen = "options"
                     elif GO.active_screen == "options":
+                        GO.active_screen = "name"
+                    elif GO.active_screen =="name":
                         GO.active_screen = "intro"
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -729,16 +729,19 @@ def initialize_game():
     high_score_screen = screen("high",constants.GAME_WIDTH,constants.GAME_HEIGHT)
     options_screen = screen("options",constants.GAME_WIDTH,constants.GAME_HEIGHT)
     main_screen = screen("main",constants.GAME_WIDTH,constants.GAME_HEIGHT)
+    name_screen = screen("name",constants.GAME_WIDTH,constants.GAME_HEIGHT)
 
     intro_screen.set_BG(constants.DEFAULT_BG)
     high_score_screen.set_BG(constants.HIGHSCORE_BG)
     options_screen.set_BG(constants.DEFAULT_BG)
     main_screen.set_BG(constants.DEFAULT_BG)
+    name_screen.set_BG(constants.DEFAULT_BG)
 
     GO.add_screen(intro_screen)
     GO.add_screen(high_score_screen)
     GO.add_screen(options_screen)
     GO.add_screen(main_screen)
+    GO.add_screen(name_screen)
     
     GO.get_puzzle()
 

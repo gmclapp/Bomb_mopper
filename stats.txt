@@ -204,6 +204,16 @@
             "Date": [
                 2020,
                 9,
+                26
+            ],
+            "Score": 19.102092504501343,
+            "Flags": true,
+            "Player": "Glenn"
+        },
+        {
+            "Date": [
+                2020,
+                9,
                 20
             ],
             "Score": 21.31321907043457,
@@ -326,9 +336,9 @@
                 9,
                 26
             ],
-            "Score": 19.102092504501343,
+            "Score": 21.01220178604126,
             "Flags": true,
-            "Player": "Glenn"
+            "Player": "jensen"
         }
     ],
     "Intermediate": [
