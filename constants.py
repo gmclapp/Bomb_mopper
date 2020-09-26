@@ -3,7 +3,7 @@ import pygame
 GAME_WIDTH = 1280
 GAME_HEIGHT = 640
 PUZZLE_PAD_X = 10
-PUZZLE_PAD_Y = 112
+PUZZLE_PAD_Y = 125
 
 DEFAULT_BG = pygame.image.load("art/Screen background.png")
 HIGHSCORE_BG = pygame.image.load("art/High Score background.png")

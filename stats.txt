@@ -113,12 +113,32 @@
         {
             "Date": [
                 2020,
+                9,
+                26
+            ],
+            "Score": 16.769959211349487,
+            "Flags": true,
+            "Player": "GMC"
+        },
+        {
+            "Date": [
+                2020,
                 5,
                 29
             ],
             "Score": 17.122979402542114,
             "Player": "Glenn",
             "Flags": true
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                26
+            ],
+            "Score": 17.198983669281006,
+            "Flags": true,
+            "Player": "Glenn"
         },
         {
             "Date": [
@@ -276,7 +296,7 @@
                 9,
                 26
             ],
-            "Score": 16.769959211349487,
+            "Score": 17.99602961540222,
             "Flags": true,
             "Player": "GMC"
         }

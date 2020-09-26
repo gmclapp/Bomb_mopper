@@ -21,6 +21,9 @@ class game_object:
         
         self.time = stringVar()
         self.bombs = stringVar()
+
+        self.timer = None
+        self.bomb_counter = None
     
         self.puzzle = None
         self.load_stats()
@@ -140,8 +143,17 @@ class game_object:
         elif self.game_mode.get() == 3: # Custom
             pass
         if not self.puzzle.finished:
-            GO.current_time = time.time() - self.puzzle.start_time
-            self.time.set("{:4.2f}".format(GO.current_time))
+            self.current_time = time.time() - self.puzzle.start_time
+            self.time.set("{:4.2f}".format(self.current_time))
+        if self.timer:
+            self.timer.update(self.current_time)
+        if self.bomb_counter:
+            self.bomb_counter.update(int(self.bombs.get()))
+            
+    def attach_timer(self,timer):
+        self.timer = timer
+    def attach_bombcount(self,timer):
+        self.bomb_counter = timer
 
 class Puzzle:
     def __init__(self,wid,hei,mines,GO):
@@ -500,8 +512,6 @@ class screen:
     def update(self):
         for b in self.buttons:
             b.update()
-        for s in self.sprites:
-            s.update() # Pass the current number to be drawn if timer
 
     def draw(self):
 ##        self.surf.fill(self.BG)
@@ -880,6 +890,11 @@ def initialize_game():
 ##    bomb_label.place(50,32,main_screen)
     time_display = timer(345,126,constants.S_TIMER)
     time_display.place(142, 10, main_screen)
+    GO.attach_timer(time_display)
+
+    bomb_display = timer(345,126,constants.S_TIMER)
+    bomb_display.place(750,10,main_screen)
+    GO.attach_bombcount(bomb_display)
 
     # Build highscore tables
     beginner_scores_label = Label(stringVar("Beginner"))
