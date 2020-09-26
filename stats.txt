@@ -34,6 +34,26 @@
             "Date": [
                 2020,
                 9,
+                25
+            ],
+            "Score": 12.739728689193726,
+            "Flags": true,
+            "Player": "GMC"
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                25
+            ],
+            "Score": 13.040745973587036,
+            "Flags": true,
+            "Player": "GMC"
+        },
+        {
+            "Date": [
+                2020,
+                9,
                 20
             ],
             "Score": 15.35787844657898,
@@ -59,6 +79,16 @@
             "Score": 15.590891599655151,
             "Player": "Glenn",
             "Flags": true
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                25
+            ],
+            "Score": 15.69889783859253,
+            "Flags": true,
+            "Player": "Glenn"
         },
         {
             "Date": [
@@ -109,6 +139,16 @@
             "Score": 17.915435552597046,
             "Player": "Glenn",
             "Flags": true
+        },
+        {
+            "Date": [
+                2020,
+                9,
+                23
+            ],
+            "Score": 18.91685175895691,
+            "Flags": true,
+            "Player": "Glenn"
         },
         {
             "Date": [
@@ -224,11 +264,11 @@
             "Date": [
                 2020,
                 9,
-                23
+                25
             ],
-            "Score": 18.91685175895691,
+            "Score": 15.215870380401611,
             "Flags": true,
-            "Player": "Glenn"
+            "Player": "GMC"
         }
     ],
     "Intermediate": [
