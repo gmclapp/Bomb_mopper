@@ -573,10 +573,13 @@ class timer:
         
     def update(self,number=0000.0):
         self.number = number
-        self.dig1 = self.digit_dict[int(self.number//1000)]
-        self.dig2 = self.digit_dict[int((self.number%1000)//100)]
-        self.dig3 = self.digit_dict[int((self.number%100)//10)]
-        self.dig4 = self.digit_dict[int((self.number%10)//1)]
+        try:
+            self.dig1 = self.digit_dict[int(self.number//1000)]
+            self.dig2 = self.digit_dict[int((self.number%1000)//100)]
+            self.dig3 = self.digit_dict[int((self.number%100)//10)]
+            self.dig4 = self.digit_dict[int((self.number%10)//1)]
+        except KeyError:
+            pass
         
         
 def parse_date(date):
