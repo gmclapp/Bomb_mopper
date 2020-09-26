@@ -477,6 +477,7 @@ class screen:
                  wid=constants.GAME_WIDTH,
                  hei=constants.GAME_HEIGHT):
         self.buttons = []
+        self.sprites = []
         self.active = False
         self.wid = wid
         self.hei = hei
@@ -499,12 +500,16 @@ class screen:
     def update(self):
         for b in self.buttons:
             b.update()
+        for s in self.sprites:
+            s.update() # Pass the current number to be drawn if timer
 
     def draw(self):
 ##        self.surf.fill(self.BG)
         self.surf.blit(self.BG,(0,0))
         for b in self.buttons:
             b.draw()
+        for s in self.sprites:
+            s.draw()
 
     def add_button(self,new_button):
         self.buttons.append(new_button)
@@ -512,9 +517,58 @@ class screen:
     def remove_button(self,button):
         self.buttons.remove(button)
 
+    def add_sprite(self,new_sprite):
+        self.sprites.append(new_sprite)
+
+    def remove_sprite(self,sprite):
+        self.sprites.remove(sprite)
+        
     def make_active(self):
         GO.change_active_screen(self.name)
 
+class timer:
+    def __init__(self,wid,hei,art):
+        self.wid=wid
+        self.height=hei
+        self.art=art
+        self.digit_dict = {0: constants.S_0_7SEG,
+                           1: constants.S_1_7SEG,
+                           2: constants.S_2_7SEG,
+                           3: constants.S_3_7SEG,
+                           4: constants.S_4_7SEG,
+                           5: constants.S_5_7SEG,
+                           6: constants.S_6_7SEG,
+                           7: constants.S_7_7SEG,
+                           8: constants.S_8_7SEG,
+                           9: constants.S_9_7SEG}
+        
+        self.number = 0000.0 # The number that the timer will display
+        self.dig1 = self.digit_dict[int(self.number//1000)]
+        self.dig2 = self.digit_dict[int((self.number%1000)//100)]
+        self.dig3 = self.digit_dict[int((self.number%100)//10)]
+        self.dig4 = self.digit_dict[int((self.number%10)//1)]
+
+    def place(self,x,y,screen):
+        self.x = x
+        self.y = y
+        self.screen = screen
+        screen.add_sprite(self)
+        
+    def draw(self):
+        self.screen.surf.blit(self.art,(self.x,self.y))
+        self.screen.surf.blit(self.dig1,(self.x+35,self.y+12))
+        self.screen.surf.blit(self.dig2,(self.x+107,self.y+12))
+        self.screen.surf.blit(self.dig3,(self.x+178,self.y+12))
+        self.screen.surf.blit(self.dig4,(self.x+251,self.y+12))
+        
+    def update(self,number=0000.0):
+        self.number = number
+        self.dig1 = self.digit_dict[int(self.number//1000)]
+        self.dig2 = self.digit_dict[int((self.number%1000)//100)]
+        self.dig3 = self.digit_dict[int((self.number%100)//10)]
+        self.dig4 = self.digit_dict[int((self.number%10)//1)]
+        
+        
 def parse_date(date):
     year,month,day = [int(x) for x in date.split('-')]
     d = dt.date(year,month,day)
@@ -820,10 +874,12 @@ def initialize_game():
     
 
     # Build game screen timers and counters  
-    time_label = Label(GO.time)
-    bomb_label = Label(GO.bombs)
-    time_label.place(300,32,main_screen)
-    bomb_label.place(50,32,main_screen)
+##    time_label = Label(GO.time)
+##    bomb_label = Label(GO.bombs)
+##    time_label.place(300,32,main_screen)
+##    bomb_label.place(50,32,main_screen)
+    time_display = timer(345,126,constants.S_TIMER)
+    time_display.place(142, 10, main_screen)
 
     # Build highscore tables
     beginner_scores_label = Label(stringVar("Beginner"))

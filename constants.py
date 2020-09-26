@@ -3,9 +3,8 @@ import pygame
 GAME_WIDTH = 1280
 GAME_HEIGHT = 640
 PUZZLE_PAD_X = 10
-PUZZLE_PAD_Y = 80
+PUZZLE_PAD_Y = 112
 
-##DEFAULT_BG = (200,0,0)
 DEFAULT_BG = pygame.image.load("art/Screen background.png")
 HIGHSCORE_BG = pygame.image.load("art/High Score background.png")
 
@@ -53,6 +52,14 @@ S_NUMBERS = {1:S_1,
              9:S_9,
              0:S_0}
 
-                        
-
-
+S_TIMER = pygame.image.load("art/Timer32.png")
+S_0_7SEG = pygame.image.load("art/0_7seg.png")
+S_1_7SEG = pygame.image.load("art/1_7seg.png")
+S_2_7SEG = pygame.image.load("art/2_7seg.png")
+S_3_7SEG = pygame.image.load("art/3_7seg.png")
+S_4_7SEG = pygame.image.load("art/4_7seg.png")
+S_5_7SEG = pygame.image.load("art/5_7seg.png")
+S_6_7SEG = pygame.image.load("art/6_7seg.png")
+S_7_7SEG = pygame.image.load("art/7_7seg.png")
+S_8_7SEG = pygame.image.load("art/8_7seg.png")
+S_9_7SEG = pygame.image.load("art/9_7seg.png")
