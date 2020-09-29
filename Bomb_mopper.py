@@ -535,6 +535,12 @@ class screen:
     def make_active(self):
         GO.change_active_screen(self.name)
 
+class Dialog(screen):
+    def __init__(self):
+        '''A class defininng a "screen" that can be active
+        on top of another screen.'''
+        pass
+        
 class timer:
     def __init__(self,wid,hei,art):
         self.wid=wid
