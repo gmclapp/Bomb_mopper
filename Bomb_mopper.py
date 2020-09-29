@@ -514,7 +514,6 @@ class screen:
             b.update()
 
     def draw(self):
-##        self.surf.fill(self.BG)
         self.surf.blit(self.BG,(0,0))
         for b in self.buttons:
             b.draw()
@@ -609,7 +608,6 @@ def lose_game():
     GO.lost = False
 
 def win_game():
-##    GO.puzzle.finish_time = time.time()
     print("You win!")
     win_time = GO.current_time
     win_date = unpack_date(dt.date.today())
@@ -666,8 +664,6 @@ def game_main_loop():
                     elif GO.active_screen == "high":
                         GO.active_screen = "options"
                     elif GO.active_screen == "options":
-                        GO.active_screen = "name"
-                    elif GO.active_screen =="name":
                         GO.active_screen = "intro"
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -729,13 +725,11 @@ def initialize_game():
     high_score_screen = screen("high",constants.GAME_WIDTH,constants.GAME_HEIGHT)
     options_screen = screen("options",constants.GAME_WIDTH,constants.GAME_HEIGHT)
     main_screen = screen("main",constants.GAME_WIDTH,constants.GAME_HEIGHT)
-    name_screen = screen("name",constants.GAME_WIDTH,constants.GAME_HEIGHT)
 
     intro_screen.set_BG(constants.DEFAULT_BG)
     high_score_screen.set_BG(constants.HIGHSCORE_BG)
     options_screen.set_BG(constants.DEFAULT_BG)
     main_screen.set_BG(constants.DEFAULT_BG)
-    name_screen.set_BG(constants.DEFAULT_BG)
 
     GO.add_screen(intro_screen)
     GO.add_screen(high_score_screen)
@@ -890,10 +884,6 @@ def initialize_game():
     
 
     # Build game screen timers and counters  
-##    time_label = Label(GO.time)
-##    bomb_label = Label(GO.bombs)
-##    time_label.place(300,32,main_screen)
-##    bomb_label.place(50,32,main_screen)
     time_display = timer(345,126,constants.S_TIMER)
     time_display.place(142, 10, main_screen)
     GO.attach_timer(time_display)
@@ -912,8 +902,6 @@ def initialize_game():
     expert_anchor = 600
     
     GO.refresh_scores()
-    
-    
     return(GO)
 
 if __name__ == "__main__":
