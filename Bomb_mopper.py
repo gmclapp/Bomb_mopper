@@ -606,6 +606,7 @@ def draw_game():
     GO.screens[GO.active_screen].draw()
     GO.SURFACE_MAIN.blit(GO.screens[GO.active_screen].surf,
                          (0,0))
+    # Draw any active dialog boxes here.
     pygame.display.flip()
 
 def lose_game():
