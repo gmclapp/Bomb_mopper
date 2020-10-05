@@ -23,6 +23,7 @@ S_BACK_BUTTON_LABEL = pygame.image.load("art/Back32.png")
 S_HIGH_BUTTON_LABEL = pygame.image.load("art/High Score32.png")
 S_OPTION_BUTTON_LABEL = pygame.image.load("art/Options32.png")
 S_CONFIRM_BUTTON_LABEL = pygame.image.load("art/Confirm32.png")
+S_NAME_ENTRY_BOX = pygame.image.load("art/Text entry box.png")
 
 S_RADIO = pygame.image.load("art/Radio button32.png")
 S_RADIO_SELECTED = pygame.image.load("art/Radio button selected32.png")

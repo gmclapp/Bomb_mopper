@@ -22,6 +22,7 @@ class game_object:
         
         self.time = stringVar()
         self.bombs = stringVar()
+        self.win_player = stringVar("Test Text")
 
         self.timer = None
         self.bomb_counter = None
@@ -415,7 +416,19 @@ class Radiobutton(button):
         if self.label:
             self.label.draw()
         
+class EntryBox(button):
+    def __init__(self,wid,hei,art,pressed_art=None,label_art=None,action=None,RMB_action=None):
+        super().__init__(wid,hei,art,art,art,action=None,RMB_action=None)
 
+    def set_label(self,label):
+        self.label = Label(label)
+        self.label.place(self.x,self.y,self.screen)
+
+    def draw(self):
+        super().draw()
+        if self.label:
+            self.label.draw()    
+        
 class Var:
     def __init__(self):
         self.val = 0
@@ -642,6 +655,7 @@ def record_win():
     win_time = GO.current_time
     win_date = unpack_date(dt.date.today())
     win_flags = GO.puzzle.flags
+    win_player = GO.win_player.get()
     modes = {0:'Beginner',
              1:'Intermediate',
              2:'Expert',
@@ -653,6 +667,7 @@ def record_win():
                                                 "Player":win_player})
     GO.save_stats()
     GO.refresh_scores()
+    GO.dialogs["name"].active=False
     
 def update_game():
     if GO.lost and not GO.puzzle.finished:
@@ -866,6 +881,9 @@ def initialize_game():
                             constants.S_CONFIRM_BUTTON_LABEL,
                             action = record_win)
 
+    player_entry = EntryBox(342,32,
+                            art=constants.S_NAME_ENTRY_BOX)
+
     # Attach buttons to screens and dialog boxes
     back_button.place(10,10,main_screen)
     new_button_small.place(constants.GAME_WIDTH/2,20,main_screen)
@@ -874,6 +892,10 @@ def initialize_game():
     confirm_button.place((constants.DIALOG_WIDTH-128)/2,
                          (constants.DIALOG_HEIGHT-64)/2,
                          name_entry)
+    player_entry.place((constants.DIALOG_WIDTH-342)/2,
+                       (constants.DIALOG_HEIGHT-64)/2 - 32,
+                       name_entry)
+    player_entry.set_label(GO.win_player)
 
     # Build game mode radio buttons
     beginner_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
