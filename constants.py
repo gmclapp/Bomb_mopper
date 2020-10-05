@@ -4,9 +4,14 @@ GAME_WIDTH = 1280
 GAME_HEIGHT = 640
 PUZZLE_PAD_X = 10
 PUZZLE_PAD_Y = 125
+DIALOG_WIDTH = 360
+DIALOG_HEIGHT = 180
+DIALOG_ANCHOR_X = (GAME_WIDTH-DIALOG_WIDTH)/2
+DIALOG_ANCHOR_Y = (GAME_HEIGHT-DIALOG_HEIGHT)/2
 
 DEFAULT_BG = pygame.image.load("art/Screen background.png")
 HIGHSCORE_BG = pygame.image.load("art/High Score background.png")
+DIALOG_BG = pygame.image.load("art/Name Dialog.png")
 
 S_BOMB = pygame.image.load("art/Bomb32.png")
 SITE_SIZE = 32
@@ -17,6 +22,7 @@ S_NEW_BUTTON_LABEL = pygame.image.load("art/New Game32.png")
 S_BACK_BUTTON_LABEL = pygame.image.load("art/Back32.png")
 S_HIGH_BUTTON_LABEL = pygame.image.load("art/High Score32.png")
 S_OPTION_BUTTON_LABEL = pygame.image.load("art/Options32.png")
+S_CONFIRM_BUTTON_LABEL = pygame.image.load("art/Confirm32.png")
 
 S_RADIO = pygame.image.load("art/Radio button32.png")
 S_RADIO_SELECTED = pygame.image.load("art/Radio button selected32.png")

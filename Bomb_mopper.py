@@ -10,6 +10,7 @@ class game_object:
     def __init__(self):
         self.active_screen = "intro" # intro, main, high, options
         self.screens = {}
+        self.dialogs = {}
         self.won = False
         self.lost = False
         self.wid = 6
@@ -28,6 +29,8 @@ class game_object:
         self.puzzle = None
         self.load_stats()
         self.score_labels = []
+
+        # Stats variables for pending win data entry  
 
     def load_stats(self):
         try:
@@ -67,6 +70,12 @@ class game_object:
         
         self.screens[key] = val
 
+    def add_dialog(self,new_dialog):
+        key = new_dialog.name
+        val = new_dialog
+        
+        self.dialogs[key] = val
+        
     def get_puzzle(self):
         if self.puzzle:
             for b in self.puzzle.buttons:
@@ -485,12 +494,14 @@ class Site(button):
         return(self.opened)
 
 class screen:
-    def __init__(self, name,
+    def __init__(self, name, x=0, y=0,
                  wid=constants.GAME_WIDTH,
                  hei=constants.GAME_HEIGHT):
         self.buttons = []
         self.sprites = []
         self.active = False
+        self.x = x
+        self.y = y
         self.wid = wid
         self.hei = hei
         self.name = name
@@ -536,11 +547,12 @@ class screen:
         GO.change_active_screen(self.name)
 
 class Dialog(screen):
-    def __init__(self):
-        '''A class defininng a "screen" that can be active
-        on top of another screen.'''
-        pass
-        
+    def __init__(self, name, x=0, y=0,
+                 wid=constants.GAME_WIDTH,
+                 hei=constants.GAME_HEIGHT):
+        super().__init__(name, x, y,
+                         wid,
+                         hei)
 class timer:
     def __init__(self,wid,hei,art):
         self.wid=wid
@@ -604,9 +616,15 @@ def quit_nicely():
 
 def draw_game():
     GO.screens[GO.active_screen].draw()
+    
+            
     GO.SURFACE_MAIN.blit(GO.screens[GO.active_screen].surf,
                          (0,0))
-    # Draw any active dialog boxes here.
+    for Diag in GO.dialogs:
+        if GO.dialogs[Diag].active:
+            GO.dialogs[Diag].draw()
+            GO.SURFACE_MAIN.blit(GO.dialogs[Diag].surf,
+                                 (GO.dialogs[Diag].x,GO.dialogs[Diag].y))
     pygame.display.flip()
 
 def lose_game():
@@ -615,6 +633,9 @@ def lose_game():
     GO.lost = False
 
 def win_game():
+    GO.dialogs["name"].active = True
+    
+def record_win():
     print("You win!")
     win_time = GO.current_time
     win_date = unpack_date(dt.date.today())
@@ -728,24 +749,36 @@ def initialize_game():
     GO.SURFACE_MAIN = pygame.display.set_mode((constants.GAME_WIDTH,
                                                constants.GAME_HEIGHT))
 
-    intro_screen = screen("intro",constants.GAME_WIDTH,constants.GAME_HEIGHT)
-    high_score_screen = screen("high",constants.GAME_WIDTH,constants.GAME_HEIGHT)
-    options_screen = screen("options",constants.GAME_WIDTH,constants.GAME_HEIGHT)
-    main_screen = screen("main",constants.GAME_WIDTH,constants.GAME_HEIGHT)
+    # Build game screens
+    intro_screen = screen("intro",0,0,constants.GAME_WIDTH,constants.GAME_HEIGHT)
+    high_score_screen = screen("high",0,0,constants.GAME_WIDTH,constants.GAME_HEIGHT)
+    options_screen = screen("options",0,0,constants.GAME_WIDTH,constants.GAME_HEIGHT)
+    main_screen = screen("main",0,0,constants.GAME_WIDTH,constants.GAME_HEIGHT)
 
+    # Build dialog boxes
+    name_entry = Dialog("name",constants.DIALOG_ANCHOR_X,
+                        constants.DIALOG_ANCHOR_Y,
+                        constants.DIALOG_WIDTH,
+                        constants.DIALOG_HEIGHT)
+
+    # Set background art for screens and dialog boxes
     intro_screen.set_BG(constants.DEFAULT_BG)
     high_score_screen.set_BG(constants.HIGHSCORE_BG)
     options_screen.set_BG(constants.DEFAULT_BG)
     main_screen.set_BG(constants.DEFAULT_BG)
+    name_entry.set_BG(constants.DIALOG_BG)
 
+    # Attach screens and dialog boxes to the game object
     GO.add_screen(intro_screen)
     GO.add_screen(high_score_screen)
     GO.add_screen(options_screen)
     GO.add_screen(main_screen)
-    GO.add_screen(name_screen)
-    
+    GO.add_dialog(name_entry)
+
+    # Get a new puzzle
     GO.get_puzzle()
 
+    # Build buttons for screens and dialog boxes
     new_button = button(128,64,
                         constants.S_LARGE_BUTTON,
                         constants.S_LARGE_BUTTON_PRESSED,
@@ -788,11 +821,21 @@ def initialize_game():
                         constants.S_SITE_PRESSED,
                         constants.S_NEW,
                         action = GO.get_puzzle)
-    
+
+    confirm_button = button(128,64,
+                            constants.S_LARGE_BUTTON,
+                            constants.S_LARGE_BUTTON_PRESSED,
+                            constants.S_CONFIRM_BUTTON_LABEL,
+                            action = record_win)
+
+    # Attach buttons to screens and dialog boxes
     back_button.place(10,10,main_screen)
     new_button_small.place(constants.GAME_WIDTH/2,20,main_screen)
     back_button2.place(10,10,high_score_screen)
     back_button3.place(10,10,options_screen)
+    confirm_button.place((constants.DIALOG_WIDTH-128)/2,
+                         (constants.DIALOG_HEIGHT-64)/2,
+                         name_entry)
 
     # Build game mode radio buttons
     beginner_button = Radiobutton(constants.SITE_SIZE,constants.SITE_SIZE,
