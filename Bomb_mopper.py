@@ -324,6 +324,8 @@ class button:
             self.screen.surf.blit(self.label_art,(self.x,self.y))
 
     def is_clicked(self,mx,my,MB):
+        mx -= self.screen.x
+        my -= self.screen.y
         if self.x < mx < self.x + self.wid and self.y < my < self.y + self.hei:
             if MB == "LEFT":
                 self.clicked = True
