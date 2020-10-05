@@ -663,6 +663,9 @@ def update_game():
         GO.puzzle.win_check()
     GO.update()
     GO.screens[GO.active_screen].update()
+    for Diag in GO.dialogs:
+        if GO.dialogs[Diag].active:
+            GO.dialogs[Diag].update()
 
 def game_main_loop():
     game_quit = False
@@ -719,17 +722,50 @@ def game_main_loop():
                     print("Mouse button {}".format(event.button))
                 
         if LMB_down:
-            GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
+            Dialog_active = False
+            for Diag in GO.dialogs:
+                if GO.dialogs[Diag].active:
+                    Dialog_active = True
+                    GO.dialogs[Diag].is_pressed(down_x,down_y,"LEFT")
+            if not Dialog_active:
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"LEFT")
+                
         if RMB_down:
-            GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
+            Dialog_active = False
+            for Diag in GO.dialogs:
+                if GO.dialogs[Diag].active:
+                    Dialog_active = True
+                    GO.dialogs[Diag].is_pressed(down_x,down_y,"RIGHT")
+            if not Dialog_active:
+                GO.screens[GO.active_screen].is_pressed(down_x,down_y,"RIGHT")
+
         if L_click:
-            GO.screens[GO.active_screen].is_clicked(click_x,click_y,"LEFT")
+            Dialog_active = False
+            for Diag in GO.dialogs:
+                if GO.dialogs[Diag].active:
+                    Dialog_active = True
+                    GO.dialogs[Diag].is_clicked(click_x,click_y,"LEFT")
+            if not Dialog_active:
+                GO.screens[GO.active_screen].is_clicked(click_x,click_y,"LEFT")
             L_click = False
+                
         if R_click:
-            GO.screens[GO.active_screen].is_clicked(click_x,click_y,"RIGHT")
+            Dialog_active = False
+            for Diag in GO.dialogs:
+                if GO.dialogs[Diag].active:
+                    Dialog_active = True
+                    GO.dialogs[Diag].is_clicked(click_x,click_y,"RIGHT")
+            if not Dialog_active:
+                GO.screens[GO.active_screen].is_clicked(click_x,click_y,"RIGHT")
             R_click = False
         if Simul_click:
-            GO.screens[GO.active_screen].is_clicked(click_x,click_y,"BOTH")
+            Dialog_active = False
+            for Diag in GO.dialogs:
+                if GO.dialogs[Diag].active:
+                    Dialog_active = True
+                    GO.dialogs[Diag].is_clicked(click_x,click_y,"BOTH")
+            if not Dialog_active:
+                GO.screens[GO.active_screen].is_clicked(click_x,click_y,"BOTH")
             Simul_click = False
                 
 
