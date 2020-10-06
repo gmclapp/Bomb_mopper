@@ -13,6 +13,16 @@
         {
             "Date": [
                 2020,
+                10,
+                5
+            ],
+            "Score": 9.911566734313965,
+            "Flags": true,
+            "Player": "Glenn"
+        },
+        {
+            "Date": [
+                2020,
                 9,
                 20
             ],
@@ -123,6 +133,16 @@
         {
             "Date": [
                 2020,
+                10,
+                5
+            ],
+            "Score": 16.21892786026001,
+            "Flags": true,
+            "Player": "Test Text"
+        },
+        {
+            "Date": [
+                2020,
                 9,
                 23
             ],
@@ -133,12 +153,32 @@
         {
             "Date": [
                 2020,
+                10,
+                5
+            ],
+            "Score": 16.509944200515747,
+            "Flags": true,
+            "Player": "Glenn"
+        },
+        {
+            "Date": [
+                2020,
                 9,
                 26
             ],
             "Score": 16.769959211349487,
             "Flags": true,
             "Player": "GMC"
+        },
+        {
+            "Date": [
+                2020,
+                10,
+                5
+            ],
+            "Score": 17.082977056503296,
+            "Flags": true,
+            "Player": "Glenn With Text entry"
         },
         {
             "Date": [
@@ -359,16 +399,6 @@
             "Score": 358.2074885368347,
             "Flags": true,
             "Player": "Jensen"
-        },
-        {
-            "Date": [
-                2020,
-                10,
-                5
-            ],
-            "Score": 16.21892786026001,
-            "Flags": true,
-            "Player": "Test Text"
         }
     ],
     "Intermediate": [
@@ -381,6 +411,16 @@
             "Score": 69.11595296859741,
             "Player": "Glenn",
             "Flags": true
+        },
+        {
+            "Date": [
+                2020,
+                10,
+                5
+            ],
+            "Score": 74.90428423881531,
+            "Flags": true,
+            "Player": "Glenn"
         },
         {
             "Date": [
@@ -413,5 +453,16 @@
             "Flags": true
         }
     ],
-    "Expert": []
+    "Expert": [
+        {
+            "Date": [
+                2020,
+                10,
+                5
+            ],
+            "Score": 406.0942270755768,
+            "Flags": true,
+            "Player": "Glenn"
+        }
+    ]
 }

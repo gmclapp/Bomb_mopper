@@ -703,16 +703,12 @@ def game_main_loop():
             if event.type == pygame.QUIT:
                 game_quit = True
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    if GO.active_screen == "intro":
-                        GO.active_screen = "main"
-                    elif GO.active_screen == "main":
-                        GO.active_screen = "high"
-                    elif GO.active_screen == "high":
-                        GO.active_screen = "options"
-                    elif GO.active_screen == "options":
-                        GO.active_screen = "intro"
+            if event.type == pygame.KEYDOWN and GO.dialogs["name"].active:
+                if event.key == pygame.K_BACKSPACE:
+                    GO.win_player.set(GO.win_player.get()[:-1])
+                else:
+                    GO.win_player.set(GO.win_player.get() + event.unicode)
+                                      
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     LMB_down = True
