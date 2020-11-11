@@ -163,6 +163,16 @@
         {
             "Date": [
                 2020,
+                10,
+                5
+            ],
+            "Score": 16.68295407295227,
+            "Flags": true,
+            "Player": "Not Karrie"
+        },
+        {
+            "Date": [
+                2020,
                 9,
                 26
             ],
@@ -259,6 +269,16 @@
             "Score": 18.91685175895691,
             "Flags": true,
             "Player": "Glenn"
+        },
+        {
+            "Date": [
+                2020,
+                10,
+                5
+            ],
+            "Score": 18.973085165023804,
+            "Flags": true,
+            "Player": "Not Karrie"
         },
         {
             "Date": [
@@ -451,6 +471,16 @@
             "Score": 121.6204833984375,
             "Player": "Glenn",
             "Flags": true
+        },
+        {
+            "Date": [
+                2020,
+                10,
+                5
+            ],
+            "Score": 64.06066417694092,
+            "Flags": false,
+            "Player": "Yes Karrie"
         }
     ],
     "Expert": [
